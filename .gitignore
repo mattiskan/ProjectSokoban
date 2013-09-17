@@ -1,6 +1,17 @@
 *.class
 
+# tmp-files
+*~
+*.tmp
+\#*\#
+
+
 # Package Files #
 *.jar
 *.war
 *.ear
+
+# Compressions
+*.zip
+*.tar*
+*.rar
