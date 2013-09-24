@@ -36,12 +36,9 @@ public enum MapSquareType {
     public boolean isBox(){
 	return (this==BOX || this==BOX_ON_GOAL);
     }
-
-    /**
-     *    True if square can hold a box or player
-     */
+    
     public boolean isOpen(){
-	return !(this==WALL || this==VOID);
+	return !(this==WALL || isBox());
     }
 
     @Override

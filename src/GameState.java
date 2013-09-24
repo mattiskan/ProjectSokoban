@@ -2,23 +2,52 @@ import java.io.*;
 import java.util.*;
 
 public class GameState {
+
+    public static final Point[] move = {
+	new Point(-1, 0),
+	new Point(1, 0),
+	new Point(0, 1),
+	new Point(0, -1)
+    };
+
+    public static final String[] movesToString = {
+	"L", "R", "D", "U"
+    };
+
     public static Map map;
     public BitSet boxes;
     public Point player;
+    String howIGotHere;
+    
+    public GameState parent;
 
-    public GameState(GameState prev, int moveDir) {
-	player = new Point(prev.player.x+move[moveDir].x, prev.player.y+move[moveDir].y);
-	
+    public GameState(GameState prev, Point newPlayerPosBeforeMovement, Point direction, String howIGotHere) {
+	parent = prev;
+	this.boxes = prev.boxes;
+	Point newPos = newPlayerPosBeforeMovement.add(direction);
+	pushBox(newPos, direction);
+	player = newPos;
+	this.howIGotHere=howIGotHere;
     }
 
     public GameState(Point player, BitSet boxes, Map cmap) {
 	this.player = player;
 	this.boxes = boxes;
 	map = cmap;
+	howIGotHere = "";
     }
 
     public List<GameState> getPossibleMoves() {
-	return null;
+	ArrayList<GameState> possibleMoves = new ArrayList<GameState>();
+	for(int d=0; d<4; d++){
+	    Point direction = move[d];
+	    Point nextPos = player.add(direction);
+
+	    MapSquareType nextSquare = getSquare(nextPos);
+	    if(nextSquare.isOpen() || nextSquare.isBox() && getSquare(nextPos.add(direction)).isOpen())
+		possibleMoves.add(new GameState(this, player, direction, movesToString[d]));
+	}
+	return possibleMoves;
     }
 
     public ArrayList<Point> getBoxes() {
@@ -28,17 +57,19 @@ public class GameState {
 	}
 	return boxList;
     }
-
-    public static final Point[] move = {
-	new Point(-1, 0),
-	new Point(1, 0),
-	new Point(0, 1),
-	new Point(0, -1)
-    };
     
     public boolean hasBox(Point coord) {
 	return boxes.get(map.openSquareNumbers[coord.y][coord.x]);
-	
+    }
+    
+    public void pushBox(Point coord, Point direction){
+	if(!getSquare(coord).isBox()){
+	    System.err.println("Pushed null box");
+	    return;
+	}
+	boxes.set(map.openSquareNumbers[coord.y][coord.x],false);
+	coord.add(direction);
+	boxes.set(map.openSquareNumbers[coord.y][coord.x],true);
     }
     
     public MapSquareType getSquare(Point coord){
@@ -63,7 +94,7 @@ public class GameState {
 	int openGoalCount = boxes.size();
 
 	for(Point box : boxes){
-	    if( map.getSquare(box) != MapSquareType.GOAL )
+	    if( map.getSquare(box) == MapSquareType.GOAL )
 		openGoalCount--;
 	}
 	return openGoalCount;
@@ -74,6 +105,19 @@ public class GameState {
 	return openGoalCount() == 0;
     }
     
+    public String generatePath(){
+	StringBuilder sb = new StringBuilder();
+	generatePathHelper(this, sb);
+	return sb.toString();
+    }
+
+    private void generatePathHelper(GameState child, StringBuilder sb){
+	if(child == null)
+	    return;
+	generatePathHelper(this.parent, sb);
+	sb.append(child.howIGotHere);
+    }
+
     @Override
     public String toString(){
 	StringBuilder sb = new StringBuilder();

@@ -11,9 +11,6 @@ public class Sokoban {
 
     public Sokoban(){
 	GameState initial = new GameStateFactory().getInitialGameState();
-	
-	System.out.println(initial);
-
 	System.out.println(IDAStar(initial));
     }
 
@@ -29,7 +26,7 @@ public class Sokoban {
 	while(true) {
 	    int t = search(initialState, 0, boundary);
 	    if(t == FOUND) {
-		return pathToGoal;
+		return "done: " + pathToGoal;
 	    } else if(t == NOT_FOUND) {
 		return "Path not found";
 	    }
@@ -39,9 +36,10 @@ public class Sokoban {
 
     public int search(GameState node, int g, int boundary) {
         if( node.hasAllBoxesOnGoals() ) {
+	    pathToGoal = node.generatePath();
             return FOUND;
         }
-
+	System.out.println("HEj");
         int f = g + distance(node);
         if(f > boundary) {
             return f;

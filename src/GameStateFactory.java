@@ -62,9 +62,6 @@ public class GameStateFactory {
 		MapSquareType square = MapSquareType.fromChar(currentLine.charAt(x));
 		cmap[y][x] = square;//square.getStatic();
 
-		if(!square.isOpen())
-		    continue;//stängda rutor har inte spelare/lådor/mål
-
 		if(square.getStatic() == MapSquareType.GOAL)
 		    goals.add(new Point(x,y));
 		else if(square.isPlayer())
@@ -95,6 +92,5 @@ public class GameStateFactory {
 		queue.addFirst(p.add(nP));
 	    }
 	}
-	System.out.println(boxes);
     }
 }
