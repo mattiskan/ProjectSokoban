@@ -25,9 +25,16 @@ public class GameState {
 	parent = prev;
 	this.boxes = prev.boxes;
 	Point newPos = newPlayerPosBeforeMovement.add(direction);
-	pushBox(newPos, direction);
+	if(getSquare(newPos).isBox())
+	    pushBox(newPos, direction);
 	player = newPos;
-	this.howIGotHere=howIGotHere;
+	this.howIGotHere=howIGotHere;	
+	try{
+	    System.out.println(this);
+	    Thread.sleep(1000);
+	} catch(Exception e){
+	    
+	}
     }
 
     public GameState(Point player, BitSet boxes, Map cmap) {
@@ -63,10 +70,6 @@ public class GameState {
     }
     
     public void pushBox(Point coord, Point direction){
-	if(!getSquare(coord).isBox()){
-	    System.err.println("Pushed null box");
-	    return;
-	}
 	boxes.set(map.openSquareNumbers[coord.y][coord.x],false);
 	coord.add(direction);
 	boxes.set(map.openSquareNumbers[coord.y][coord.x],true);

@@ -39,7 +39,6 @@ public class Sokoban {
 	    pathToGoal = node.generatePath();
             return FOUND;
         }
-	System.out.println("HEj");
         int f = g + distance(node);
         if(f > boundary) {
             return f;
