@@ -21,6 +21,9 @@ public enum MapSquareType {
 	case BOX_ON_GOAL:
 	case PLAYER_ON_GOAL:
 	    return GOAL;
+	case BOX:
+	case PLAYER:
+	    return FREE;
 	default:
 	    return this;
 	}
