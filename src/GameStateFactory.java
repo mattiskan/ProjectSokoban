@@ -12,6 +12,7 @@ public class GameStateFactory {
     
     private MapSquareType[][] cmap; //the constant map
     private int[][] freeSquareNumbers;
+    private ArrayList<Point> freeSquarePoints;
     private Point playerPos;
     private BitSet boxes = new BitSet();
 
@@ -22,7 +23,7 @@ public class GameStateFactory {
 	populateBuffer();
 	readMapsFromBuffer();
 	flowFill();
-	Map map = new Map(cmap, goals, freeSquareNumbers);
+	Map map = new Map(cmap, goals, freeSquareNumbers, freeSquarePoints);
 	gs = new GameState(playerPos, boxes, map);
     }
 
@@ -48,9 +49,9 @@ public class GameStateFactory {
     private void readMapsFromBuffer(){
 	cmap = new MapSquareType[rowCount][mostColumns];
 	freeSquareNumbers = new int[rowCount][mostColumns];
+	freeSquarePoints = new ArrayList<Point>();
 
 	int boxPointCounter = 0;
-
 	for (int y=0; y<rowCount; y++) {
 	    cmap[y] = new MapSquareType[mostColumns];
 	    freeSquareNumbers[y] = new int[mostColumns];
@@ -59,18 +60,15 @@ public class GameStateFactory {
 	    
 	    for (int x=0; x<currentLine.length(); x++) {
 		MapSquareType square = MapSquareType.fromChar(currentLine.charAt(x));
-		cmap[y][x] = square.getStatic();
+		cmap[y][x] = square;//square.getStatic();
 
 		if(!square.isOpen())
 		    continue;//stängda rutor har inte spelare/lådor/mål
 
-		if(cmap[y][x] == MapSquareType.GOAL)
+		if(square.getStatic() == MapSquareType.GOAL)
 		    goals.add(new Point(x,y));
+		
 
-		freeSquareNumbers[y][x] = boxPointCounter++;
-
-		if(square.isBox())
-		    boxes.set(boxPointCounter-1);
 		else if(square.isPlayer())
 		    playerPos = new Point(x,y);
 	    }
@@ -81,12 +79,16 @@ public class GameStateFactory {
 	HashSet<Point> visited = new HashSet<Point>();
 	ArrayDeque<Point> queue = new ArrayDeque<Point>();
 	queue.addFirst(playerPos);
+	int boxPointCounter = 0;
 	while (!queue.isEmpty()) {
 	    Point p = queue.removeLast();
 	    if (visited.contains(p) || cmap[p.y][p.x] == MapSquareType.WALL) {
 		continue;
 	    }
-
+	    freeSquareNumbers[p.y][p.x] = boxPointCounter++;
+	    freeSquarePoints.add(p);
+	    if(cmap[p.y][p.x].isBox())
+		boxes.set(boxPointCounter-1);
        	    visited.add(p);
 	    if(cmap[p.y][p.x] == MapSquareType.VOID)
 		cmap[p.y][p.x] = MapSquareType.FREE;
@@ -94,6 +96,6 @@ public class GameStateFactory {
 		queue.addFirst(p.add(nP));
 	    }
 	}
-
+	System.out.println(boxes);
     }
 }

@@ -24,7 +24,7 @@ public class GameState {
     public ArrayList<Point> getBoxes() {
 	ArrayList<Point> boxList = new ArrayList<Point>();
 	for (int i = boxes.nextSetBit(0); i >= 0; i = boxes.nextSetBit(i+1)) {
-	    boxList.add( map.freeSquareNumbers.get(i) );
+	    boxList.add( map.freeSquarePoints.get(i) );
 	}
 	return boxList;
     }
@@ -35,7 +35,28 @@ public class GameState {
 	new Point(0, 1),
 	new Point(0, -1)
     };
-
+    
+    public boolean hasBox(Point coord) {
+	return boxes.get(map.freeSquareNumbers[coord.y][coord.x]);
+	
+    }
+    
+    public MapSquareType getSquare(Point coord){
+	if (coord==player) {
+	    if (map.getSquare(coord) == MapSquareType.GOAL) {
+		return MapSquareType.PLAYER_ON_GOAL;
+	    } else {
+		return MapSquareType.PLAYER;
+	    }
+	} else if (hasBox(coord)) {
+	    if (map.getSquare(coord) == MapSquareType.GOAL) {
+		return MapSquareType.BOX_ON_GOAL;
+	    } else {
+		return MapSquareType.BOX;
+	    }
+	}
+	return map.getSquare(coord);
+    }
     /*public void countOpen() {
 	HashSet<Point> visited = new HashSet<Point>();
 	ArrayDeque<Point> queue = new ArrayDeque<Point>();
@@ -105,5 +126,17 @@ public class GameState {
 
     boolean hasAllBoxesOnGoals(){
 	return openGoalCount() == 0;
+    }
+    
+    @Override
+    public String toString(){
+	StringBuilder sb = new StringBuilder();
+	for (int y=0; y<map.map.length;y++) {
+	    for (int x=0;x<map.map[y].length; x++) {
+		sb.append(getSquare(new Point(x, y)).toString());
+	    }
+	    sb.append("\n");
+	}
+	return sb.toString();
     }
 }
