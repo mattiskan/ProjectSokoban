@@ -1,14 +1,14 @@
 
 public class Point {
-    public final int X, Y;
+    public final int x, y;
 
     public Point(int x, int y){
-	X=x;
-	Y=y;
+	this.x=x;
+	this.y=y;
     }
     
     public int manhattanDist(Point other){
-	return Math.abs(X - other.X) + Math.abs(Y - other.Y);
+	return Math.abs(x - other.x) + Math.abs(y - other.y);
     }
     
 }

@@ -55,7 +55,7 @@ public class Sokoban {
 	int distanceCost = 0;
 
 	Queue<Point> boxes = current.getBoxes();
-	HashSet<Point> goals = map.getOpenGoals();
+	HashSet<Point> goals = current.getOpenGoals();
 
 	while(!boxes.isEmpty()) {
 	    Point box = boxes.poll();

@@ -6,7 +6,7 @@ public class GameState {
     public Point player;
 
     public GameState(GameState prev, int moveDir) {
-	player = new Point(prev.player.getX()+move[moveDir].getX(), prev.player.getY()+move[moveDir].getY());
+	player = new Point(prev.player.x+move[moveDir].x, prev.player.y+move[moveDir].y);
 	
     }
 
@@ -21,8 +21,9 @@ public class GameState {
     public LinkedList<Point> getBoxes() {
 	LinkedList<Point> boxList = new LinkedList<Point>();
 	for (int i = boxes.nextSetBit(0); i >= 0; i = boxes.nextSetBit(i+1)) {
-	    boxList.add(new Point());
+	    boxList.add(map.boxToPoint.get(i));
 	}
+	return boxList;
     }  
 
     public HashSet<Point> getOpenGoals() {
@@ -37,24 +38,24 @@ public class GameState {
     };
     public void countOpen() {
 	HashSet<Point> visited = new HashSet<Point>();
-	ArrayDeque<Point> queue = new ArrayDequeue<Point>();
-	queue.add(state.player);
+	ArrayDeque<Point> queue = new ArrayDeque<Point>();
+	queue.addFirst(player);
 	int count = 0;
 	while (!queue.isEmpty()) {
-	    Point p = queue.dequeue();
-	    if (visited.contains(p) || map[p.getY()][p.getX()] != MapSquareType.WALL) {
+	    Point p = queue.removeLast();
+	    if (visited.contains(p) || map.map[p.y][p.x] != MapSquareType.WALL) {
 		continue;
 	    }
-	    boxToPoint[p.getX()][p.getY()] = count;
-	    pointToBox.add(count);
+	    map.pointToBox[p.x][p.y] = count;
+	    map.boxToPoint.add(p);
 	    count++;
 	    visited.add(p);
-	    map[p.getY()][p.getX()] = MapSquareTypes.FREE;
+	    map.map[p.y][p.x] = MapSquareType.FREE;
 	    for (Point nP : move) {
-		queue.add(nP);
+		queue.addFirst(nP);
 	    }
 	}
-        openCount = count;
+        map.openSquares = count;
     }
 	/*map = new MapSquareType[tmpStorage.size()][longestLine];
 	for (int y=0; y<map.length; y++) {
