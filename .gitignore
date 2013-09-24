@@ -3,7 +3,7 @@
 # tmp-files
 *~
 *.tmp
-\#*\#
+*\#*
 
 
 # Package Files #

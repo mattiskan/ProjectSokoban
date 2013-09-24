@@ -1,4 +1,3 @@
-
 public enum MapSquareType {
     FREE, WALL, GOAL, PLAYER, PLAYER_ON_GOAL, BOX, BOX_ON_GOAL, VOID;
 
@@ -17,17 +16,42 @@ public enum MapSquareType {
 	}
     }
 
+    public MapSquareType getStatic(){
+	switch(this){
+	case BOX_ON_GOAL:
+	case PLAYER_ON_GOAL:
+	    return GOAL;
+	default:
+	    return this;
+	}
+    }    
+
+    public boolean isPlayer(){
+	return (this==PLAYER || this==PLAYER_ON_GOAL);
+    }
+    
+    public boolean isBox(){
+	return (this==BOX || this==BOX_ON_GOAL);
+    }
+
+    /**
+     *    True if square can hold a box or player
+     */
+    public boolean isOpen(){
+	return !(this==WALL || this==VOID);
+    }
+
     @Override
     public String toString(){
 	switch(this) {
-	case VOID: return "X";
+	case VOID: return " ";
 	case WALL: return "#";
 	case GOAL: return ".";
 	case PLAYER: return "@";
 	case BOX: return "$";
 	case BOX_ON_GOAL: return "*";
 	case PLAYER_ON_GOAL: return "+";
-	case FREE: return " ";
+	case FREE: return "o";
 	}
 	throw new AssertionError();
     }

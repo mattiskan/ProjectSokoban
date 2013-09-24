@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 
 public class GameState {
@@ -10,14 +11,16 @@ public class GameState {
 	
     }
 
-    public GameState(Map map) {
-	
+    public GameState(Point player, BitSet boxes, Map cmap) {
+	this.player = player;
+	this.boxes = boxes;
+	map = cmap;
     }
-    
 
     public List<GameState> getPossibleMoves() {
 	return null;
     }
+
     public LinkedList<Point> getBoxes() {
 	LinkedList<Point> boxList = new LinkedList<Point>();
 	for (int i = boxes.nextSetBit(0); i >= 0; i = boxes.nextSetBit(i+1)) {
@@ -25,6 +28,8 @@ public class GameState {
 	}
 	return boxList;
     }  
+
+    
 
     public HashSet<Point> getOpenGoals() {
 	return null;
@@ -36,6 +41,7 @@ public class GameState {
 	new Point(0, 1),
 	new Point(0, -1)
     };
+
     public void countOpen() {
 	HashSet<Point> visited = new HashSet<Point>();
 	ArrayDeque<Point> queue = new ArrayDeque<Point>();
@@ -46,7 +52,7 @@ public class GameState {
 	    if (visited.contains(p) || map.map[p.y][p.x] != MapSquareType.WALL) {
 		continue;
 	    }
-	    map.pointToBox[p.x][p.y] = count;
+	    //map.pointToBox[p.x][p.y] = count; vet inte om jag fick ta bort denna
 	    map.boxToPoint.add(p);
 	    count++;
 	    visited.add(p);
@@ -57,6 +63,10 @@ public class GameState {
 	}
         map.openSquares = count;
     }
+
+
+    // Axel du får ta bort det här om det inte behövs:
+
 	/*map = new MapSquareType[tmpStorage.size()][longestLine];
 	for (int y=0; y<map.length; y++) {
 	    map[y] = new MapSquareType[longestLine];
@@ -86,7 +96,8 @@ public class GameState {
 		 }
 	    }
 	    }*/
-    boolean isGoal(){
+
+    boolean hasAllBoxesOnGoals(){
 	return false;
     }
 }

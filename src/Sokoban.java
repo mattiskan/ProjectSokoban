@@ -1,10 +1,21 @@
 import java.util.*;
 
 public class Sokoban {
-    public static final int FOUND = -1;
-    public static final int NOT_FOUND = -2;
+    public static void main(String[] args){
+	new Sokoban();
+    }
+    
+    public static final int FOUND = -1,
+	                    NOT_FOUND = -2;
 
-    public Map map = null;
+
+    public Sokoban(){
+	GameState initial = new GameStateFactory().getInitialGameState();
+	
+	System.out.println(initial.map);
+
+	//System.out.println(IDAStar(initial));
+    }
 
     // distances should be measured in ints, since
     // comparisons between floats are buggy.
@@ -27,7 +38,7 @@ public class Sokoban {
     }
 
     public int search(GameState node, int g, int boundary) {
-        if(node.isGoal()) {
+        if( node.hasAllBoxesOnGoals() ) {
             return FOUND;
         }
 
