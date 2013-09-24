@@ -12,9 +12,9 @@ public class Sokoban {
     public Sokoban(){
 	GameState initial = new GameStateFactory().getInitialGameState();
 	
-	System.out.println(initial.map);
+	System.out.println(initial);
 
-	//System.out.println(IDAStar(initial));
+	System.out.println(IDAStar(initial));
     }
 
     // distances should be measured in ints, since

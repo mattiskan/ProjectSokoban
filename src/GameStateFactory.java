@@ -86,6 +86,7 @@ public class GameStateFactory {
 	    if (visited.contains(p) || cmap[p.y][p.x] == MapSquareType.WALL) {
 		continue;
 	    }
+
        	    visited.add(p);
 	    if(cmap[p.y][p.x] == MapSquareType.VOID)
 		cmap[p.y][p.x] = MapSquareType.FREE;

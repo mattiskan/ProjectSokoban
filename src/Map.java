@@ -3,10 +3,8 @@ import java.util.*;
 
 public class Map {
     public MapSquareType[][] map;
-    GameState state;
     public int openSquares;
     public int[][] freeSquareNumbers;
-    public ArrayList<Point> boxToPoint;
     private HashSet<Point> goals;
 
     public static void main(String[] args){
@@ -24,7 +22,6 @@ public class Map {
 
     @SuppressWarnings("unchecked")
     public HashSet<Point> getGoals(){
-	//Do a clone
 	return (HashSet<Point>) goals.clone();
     }
 

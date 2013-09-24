@@ -24,7 +24,7 @@ public class GameState {
     public ArrayList<Point> getBoxes() {
 	ArrayList<Point> boxList = new ArrayList<Point>();
 	for (int i = boxes.nextSetBit(0); i >= 0; i = boxes.nextSetBit(i+1)) {
-	    boxList.add(map.boxToPoint.get(i));
+	    boxList.add( map.freeSquareNumbers.get(i) );
 	}
 	return boxList;
     }
@@ -36,7 +36,7 @@ public class GameState {
 	new Point(0, -1)
     };
 
-    public void countOpen() {
+    /*public void countOpen() {
 	HashSet<Point> visited = new HashSet<Point>();
 	ArrayDeque<Point> queue = new ArrayDeque<Point>();
 	queue.addFirst(player);
@@ -56,7 +56,7 @@ public class GameState {
 	    }
 	}
         map.openSquares = count;
-    }
+	}*/
 
 
     // Axel du får ta bort det här om det inte behövs:
@@ -90,13 +90,6 @@ public class GameState {
 		 }
 	    }
 	}*/
-
-
-
-    public HashSet<Point> getOpenGoals() {
-	return null;
-    }
-    
     
     int openGoalCount(){
 	ArrayList<Point> boxes = getBoxes();
