@@ -2,9 +2,11 @@ import java.io.*;
 import java.util.*;
 
 public class Map {
-
     private MapSquareType[][] map;
-
+    GameState state;
+    int openSquares;
+    private int[] boxToPoint;
+    private ArrayList<Point> cordToBox;
     public static void main(String[] args){
 	System.out.println("Testing Map");
 	Map testMap = new Map();
@@ -35,18 +37,19 @@ public class Map {
 	} catch(IOException ioe){
 	    throw new RuntimeException("Nu gick något fel med inläsning av kartan :S");
 	}
-
 	map = new MapSquareType[tmpStorage.size()][longestLine];
-	
-	for(int row=0; row < tmpStorage.size(); row++){
-	    map[row] = new MapSquareType[longestLine];
+	for (int y=0; y<map.length; y++) {
+	    map[y] = new MapSquareType[longestLine];
+	    for (int x=0; x<map[0].length; x++) {
+		String currentLine = tmpStorage.get(y);
+		map[y][x] = MapSquareType.fromChar(currentLine.charAt(col));
 
-	    String currentLine = tmpStorage.get(row);
-	    for(int col=0; col < currentLine.length(); col++){
-		 map[row][col] = MapSquareType.fromChar(currentLine.charAt(col));
-	     }
-	 }
-     }
+	    }
+	}	
+
+
+    }
+
 
      @Override
      public String toString(){
@@ -60,5 +63,6 @@ public class Map {
 	 }
 	 return sb.toString();
      }
-  
+    
+
 }
