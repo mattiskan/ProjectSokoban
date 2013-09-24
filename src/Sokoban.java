@@ -62,15 +62,13 @@ public class Sokoban {
         return 1;
     }
 
-
     public int distance(GameState current) {
 	int distanceCost = 0;
 
-	Queue<Point> boxes = current.getBoxes();
-	HashSet<Point> goals = current.getOpenGoals();
+	ArrayList<Point> boxes = current.getBoxes();
+	HashSet<Point> goals = current.map.getGoals();
 
-	while(!boxes.isEmpty()) {
-	    Point box = boxes.poll();
+	for(Point box : boxes) {
 	    int nearest = Integer.MAX_VALUE;
 	    Point nearestOpenGoal = null;
 	    for(Point goal : goals){

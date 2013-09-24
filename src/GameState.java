@@ -21,18 +21,12 @@ public class GameState {
 	return null;
     }
 
-    public LinkedList<Point> getBoxes() {
-	LinkedList<Point> boxList = new LinkedList<Point>();
+    public ArrayList<Point> getBoxes() {
+	ArrayList<Point> boxList = new ArrayList<Point>();
 	for (int i = boxes.nextSetBit(0); i >= 0; i = boxes.nextSetBit(i+1)) {
 	    boxList.add(map.boxToPoint.get(i));
 	}
 	return boxList;
-    }  
-
-    
-
-    public HashSet<Point> getOpenGoals() {
-	return null;
     }
 
     Point[] move = {
@@ -95,9 +89,28 @@ public class GameState {
 		     openCounter++;
 		 }
 	    }
-	    }*/
+	}*/
+
+
+
+    public HashSet<Point> getOpenGoals() {
+	return null;
+    }
+    
+    
+    int openGoalCount(){
+	ArrayList<Point> boxes = getBoxes();
+	int openGoalCount = boxes.size();
+
+	for(Point box : boxes){
+	    if( map.getSquare(box) != MapSquareType.GOAL )
+		openGoalCount--;
+	}
+	return openGoalCount;
+    }
+
 
     boolean hasAllBoxesOnGoals(){
-	return false;
+	return openGoalCount() == 0;
     }
 }

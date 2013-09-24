@@ -15,12 +15,13 @@ public class GameStateFactory {
     private Point playerPos;
     private BitSet boxes = new BitSet();
 
+    private HashSet<Point> goals = new HashSet<Point>();
     private GameState gs;
 
     public GameStateFactory(){
 	populateBuffer();
 	readMapsFromBuffer();
-	Map map = new Map(cmap, freeSquareNumbers);
+	Map map = new Map(cmap, goals, freeSquareNumbers);
 	gs = new GameState(playerPos, boxes, map);
     }
 
@@ -60,7 +61,10 @@ public class GameStateFactory {
 		cmap[y][x] = square.getStatic();
 
 		if(!square.isOpen())
-		    continue; //stängda rutor har inte spelare/lådor
+		    continue;//stängda rutor har inte spelare/lådor/mål
+
+		if(cmap[y][x] == MapSquareType.GOAL)
+		    goals.add(new Point(x,y));
 
 		freeSquareNumbers[y][x] = boxPointCounter++;
 
@@ -68,7 +72,6 @@ public class GameStateFactory {
 		    boxes.set(boxPointCounter-1);
 		else if(square.isPlayer())
 		    playerPos = new Point(x,y);
-		    
 	    }
 	}
     }
