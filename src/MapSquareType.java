@@ -47,14 +47,14 @@ public enum MapSquareType {
     @Override
     public String toString(){
 	switch(this) {
-	case VOID: return " ";
+	case VOID: return "X";
 	case WALL: return "#";
 	case GOAL: return ".";
 	case PLAYER: return "@";
 	case BOX: return "$";
 	case BOX_ON_GOAL: return "*";
 	case PLAYER_ON_GOAL: return "+";
-	case FREE: return "'";
+	case FREE: return " ";
 	}
 	throw new AssertionError();
     }
