@@ -86,4 +86,7 @@ public class GameState {
 		 }
 	    }
 	    }*/
+    boolean isGoal(){
+	return false;
+    }
 }

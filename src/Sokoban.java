@@ -10,23 +10,24 @@ public class Sokoban {
     // comparisons between floats are buggy.
 
     // TODO actually record path taken
+
+    String pathToGoal;
+
     public String IDAStar(GameState initialState) {
-	/*int boundary = distance(initialState);
-       while(true) {
-           int t = search(initialState, 0, boundary);
-           if(t == FOUND) {
-               return pathToGoal;
-           } else if(t == NOT_FOUND) {
-               return null;
-           }
-           boundary = t;
-       }*/
-	return null;
+	int boundary = distance(initialState);
+	while(true) {
+	    int t = search(initialState, 0, boundary);
+	    if(t == FOUND) {
+		return pathToGoal;
+	    } else if(t == NOT_FOUND) {
+		return "Path not found";
+	    }
+	    boundary = t;
+	}
     }
 
-    public int search(GameState node, int g, int boundary, String path) {
-        /*if(isGoal(node)) {
-            pathToGoal = path;
+    public int search(GameState node, int g, int boundary) {
+        if(node.isGoal()) {
             return FOUND;
         }
 
@@ -36,13 +37,13 @@ public class Sokoban {
         }
         int min = Integer.MAX_VALUE;
         for(GameState succ : node.getPossibleMoves()) {
-            int t = search(succ, g + cost(node, succ), boundary, path + succ.lastMovePath());
+            int t = search(succ, g + cost(node, succ), boundary);
             if(t == FOUND) {
                 return FOUND;
             }
             min = Math.min(t, min);
         }
-        return min;*/return 0;
+        return min;
     }
 
 
