@@ -21,6 +21,7 @@ public class GameStateFactory {
     public GameStateFactory(){
 	populateBuffer();
 	readMapsFromBuffer();
+	flowFill();
 	Map map = new Map(cmap, goals, freeSquareNumbers);
 	gs = new GameState(playerPos, boxes, map);
     }
@@ -55,7 +56,7 @@ public class GameStateFactory {
 	    freeSquareNumbers[y] = new int[mostColumns];
 
 	    String currentLine = buffer.get(y);
-
+	    
 	    for (int x=0; x<currentLine.length(); x++) {
 		MapSquareType square = MapSquareType.fromChar(currentLine.charAt(x));
 		cmap[y][x] = square.getStatic();
@@ -76,4 +77,22 @@ public class GameStateFactory {
 	}
     }
 
+    private void flowFill(){
+	HashSet<Point> visited = new HashSet<Point>();
+	ArrayDeque<Point> queue = new ArrayDeque<Point>();
+	queue.addFirst(playerPos);
+	while (!queue.isEmpty()) {
+	    Point p = queue.removeLast();
+	    if (visited.contains(p) || cmap[p.y][p.x] == MapSquareType.WALL) {
+		continue;
+	    }
+       	    visited.add(p);
+	    if(cmap[p.y][p.x] == MapSquareType.VOID)
+		cmap[p.y][p.x] = MapSquareType.FREE;
+	    for (Point nP : GameState.move) {
+		queue.addFirst(p.add(nP));
+	    }
+	}
+
+    }
 }

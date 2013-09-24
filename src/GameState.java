@@ -29,7 +29,7 @@ public class GameState {
 	return boxList;
     }
 
-    Point[] move = {
+    public static final Point[] move = {
 	new Point(-1, 0),
 	new Point(1, 0),
 	new Point(0, 1),

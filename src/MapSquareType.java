@@ -10,7 +10,7 @@ public enum MapSquareType {
 	case '$': return BOX;
 	case '*': return BOX_ON_GOAL;
 	case '+': return PLAYER_ON_GOAL;
-	case 'o': return FREE;
+	case '\'': return FREE;
 
 	default: throw new IllegalArgumentException();
 	}
@@ -54,7 +54,7 @@ public enum MapSquareType {
 	case BOX: return "$";
 	case BOX_ON_GOAL: return "*";
 	case PLAYER_ON_GOAL: return "+";
-	case FREE: return "o";
+	case FREE: return "'";
 	}
 	throw new AssertionError();
     }
