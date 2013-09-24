@@ -11,8 +11,8 @@ public class GameStateFactory {
     private ArrayList<String> buffer = new ArrayList<String>();
     
     private MapSquareType[][] cmap; //the constant map
-    private int[][] freeSquareNumbers;
-    private ArrayList<Point> freeSquarePoints;
+    private int[][] openSquareNumbers;
+    private ArrayList<Point> openSquarePoints;
     private Point playerPos;
     private BitSet boxes = new BitSet();
 
@@ -23,7 +23,7 @@ public class GameStateFactory {
 	populateBuffer();
 	readMapsFromBuffer();
 	flowFill();
-	Map map = new Map(cmap, goals, freeSquareNumbers, freeSquarePoints);
+	Map map = new Map(cmap, goals, openSquareNumbers, openSquarePoints);
 	gs = new GameState(playerPos, boxes, map);
     }
 
@@ -48,13 +48,13 @@ public class GameStateFactory {
     
     private void readMapsFromBuffer(){
 	cmap = new MapSquareType[rowCount][mostColumns];
-	freeSquareNumbers = new int[rowCount][mostColumns];
-	freeSquarePoints = new ArrayList<Point>();
+	openSquareNumbers = new int[rowCount][mostColumns];
+	openSquarePoints = new ArrayList<Point>();
 
 	int boxPointCounter = 0;
 	for (int y=0; y<rowCount; y++) {
 	    cmap[y] = new MapSquareType[mostColumns];
-	    freeSquareNumbers[y] = new int[mostColumns];
+	    openSquareNumbers[y] = new int[mostColumns];
 
 	    String currentLine = buffer.get(y);
 	    
@@ -67,8 +67,6 @@ public class GameStateFactory {
 
 		if(square.getStatic() == MapSquareType.GOAL)
 		    goals.add(new Point(x,y));
-		
-
 		else if(square.isPlayer())
 		    playerPos = new Point(x,y);
 	    }
@@ -78,6 +76,7 @@ public class GameStateFactory {
     private void flowFill(){
 	HashSet<Point> visited = new HashSet<Point>();
 	ArrayDeque<Point> queue = new ArrayDeque<Point>();
+
 	queue.addFirst(playerPos);
 	int boxPointCounter = 0;
 	while (!queue.isEmpty()) {
@@ -85,8 +84,8 @@ public class GameStateFactory {
 	    if (visited.contains(p) || cmap[p.y][p.x] == MapSquareType.WALL) {
 		continue;
 	    }
-	    freeSquareNumbers[p.y][p.x] = boxPointCounter++;
-	    freeSquarePoints.add(p);
+	    openSquareNumbers[p.y][p.x] = boxPointCounter++;
+	    openSquarePoints.add(p);
 	    if(cmap[p.y][p.x].isBox())
 		boxes.set(boxPointCounter-1);
        	    visited.add(p);

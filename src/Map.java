@@ -4,17 +4,17 @@ import java.util.*;
 public class Map {
     public MapSquareType[][] map;
     public int openSquares;
-    public int[][] freeSquareNumbers;
-    public ArrayList<Point> freeSquarePoints;
+    public int[][] openSquareNumbers;
+    public ArrayList<Point> openSquarePoints;
     private HashSet<Point> goals;
     
     public static void main(String[] args){
     }
 
-    public Map(MapSquareType[][] map, HashSet<Point> goals, int[][] freeSquareNumbers, ArrayList<Point> freeSquarePoints){
+    public Map(MapSquareType[][] map, HashSet<Point> goals, int[][] openSquareNumbers, ArrayList<Point> openSquarePoints){
 	this.map = map;
-	this.freeSquareNumbers = freeSquareNumbers;
-	this.freeSquarePoints = freeSquarePoints;
+	this.openSquareNumbers = openSquareNumbers;
+	this.openSquarePoints = openSquarePoints;
 	this.goals = goals;
     }
 
