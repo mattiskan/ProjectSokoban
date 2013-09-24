@@ -1,0 +1,46 @@
+Pseudo code:
+
+for each playable square s
+    place stone t at s
+    for each goal g
+        if cannot push t to g
+            mark s as dead
+
+------------------------------------------------------------
+############################################################
+------------------------------------------------------------
+
+In Map-class:
+
+HashSet<Point> deadTiles;
+
+private void setDeadTiles() {
+    for(Point tile : map.getPlayableTiles()) {
+        for(Point goal : map.getGoals()) {
+            if(!map.canPushTo(tile, goal)) {
+                deadTiles.put(tile);
+            }
+        }
+    }
+}
+
+// sort of like A*
+private boolean canPushTo(Point start, Point goal) {
+    HashSet<Point> visited;
+    LinkedList<Point> queue;
+    queue.add(start);
+    while(!queue.isEmpty()) {
+        Point curr = queue.pop();
+        if(curr.equals(goal)) {
+            return true;
+        }
+        for(Point adj : map.adjacentPushableTiles(curr)) {
+            if(!visited.contains(adj)) {
+                queue.put(adj);
+                visited.put(adj);
+            }
+        }
+    }
+    return false;
+}
+
