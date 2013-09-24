@@ -24,4 +24,8 @@ public class Point {
 	return o.x==x && o.y==y;
     }
     
+    public Point add(Point other) {
+	return new Point(x+other.x, y+other.y);
+    }
+    
 }
