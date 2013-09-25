@@ -33,7 +33,7 @@ public class GameState {
 
 	try{
 	    System.out.println(this);
-	    Thread.sleep(1000);
+	    Thread.sleep(300);
 	} catch(Exception e){
 	    
 	}

@@ -78,10 +78,10 @@ public class Sokoban {
 	    Point nearestOpenGoal = null;
 	    for(Point goal : goals){
 		int distanceTo = box.manhattanDist(goal);
-		    if( distanceTo < nearest ){
-			nearest = distanceTo;
-			nearestOpenGoal = goal;
-		    }
+		if( distanceTo < nearest ){
+		    nearest = distanceTo;
+		    nearestOpenGoal = goal;
+		}
 	    }
 
 	    distanceCost += nearest;
