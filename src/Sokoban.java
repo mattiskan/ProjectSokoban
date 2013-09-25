@@ -39,6 +39,12 @@ public class Sokoban {
     }
 
     public int search(GameState node, int g, int boundary) {
+	try{
+	    System.out.println(node);
+	    Thread.sleep(300);
+	} catch(Exception e){
+	    
+	}//*/
 	//System.out.println("fsfs");
         if( node.hasAllBoxesOnGoals() ) {
 	    pathToGoal = node.generatePath();
@@ -85,7 +91,7 @@ public class Sokoban {
 	    }
 
 	    distanceCost += nearest;
-	    goals.remove(nearestOpenGoal);
+	    //goals.remove(nearestOpenGoal);
 	}
         return distanceCost;
     }

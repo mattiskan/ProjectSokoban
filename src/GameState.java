@@ -30,13 +30,6 @@ public class GameState {
 	}
 	player = newPos;
 	this.howIGotHere=howIGotHere;
-
-	try{
-	    System.out.println(this);
-	    Thread.sleep(300);
-	} catch(Exception e){
-	    
-	}
     }
 
     public GameState(Point player, BitSet boxes, Map cmap) {
@@ -59,8 +52,13 @@ public class GameState {
 	return possibleMoves;
     }
 
+    private ArrayList<Point> boxList;
     public ArrayList<Point> getBoxes() {
-	ArrayList<Point> boxList = new ArrayList<Point>();
+	if(boxList != null)
+	    return boxList;
+
+	//annars skapar vi den:
+	boxList = new ArrayList<Point>();
 	for (int i = boxes.nextSetBit(0); i >= 0; i = boxes.nextSetBit(i+1)) {
 	    boxList.add( map.openSquarePoints.get(i) );
 	}
@@ -116,15 +114,15 @@ public class GameState {
     
     public String generatePath(){
 	StringBuilder sb = new StringBuilder();
-	generatePathHelper(this, sb);
+	generatePathHelper(sb);
 	return sb.toString();
     }
 
-    private void generatePathHelper(GameState child, StringBuilder sb){
-	if(child == null)
+    private void generatePathHelper(StringBuilder sb){
+	if(parent == null)
 	    return;
-	child.generatePathHelper(this.parent, sb);
-	sb.append(child.howIGotHere);
+	parent.generatePathHelper(sb);
+	sb.append(this.howIGotHere);
     }
 
     @Override
