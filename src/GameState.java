@@ -13,7 +13,7 @@ public class GameState {
     public static final String[] movesToString = {
 	"L", "R", "D", "U"
     };
-
+    
     public static Map map;
     public BitSet boxes;
     public Point player;
@@ -23,12 +23,14 @@ public class GameState {
 
     public GameState(GameState prev, Point newPlayerPosBeforeMovement, Point direction, String howIGotHere) {
 	parent = prev;
-	this.boxes = prev.boxes;
+	this.boxes = (BitSet)prev.boxes.clone();
 	Point newPos = newPlayerPosBeforeMovement.add(direction);
-	if(getSquare(newPos).isBox())
+	if(getSquare(newPos).isBox()) {
 	    pushBox(newPos, direction);
+	}
 	player = newPos;
-	this.howIGotHere=howIGotHere;	
+	this.howIGotHere=howIGotHere;
+
 	try{
 	    System.out.println(this);
 	    Thread.sleep(1000);
@@ -66,17 +68,25 @@ public class GameState {
     }
     
     public boolean hasBox(Point coord) {
-	return boxes.get(map.openSquareNumbers[coord.y][coord.x]);
+	if (map.getSquare(coord) == MapSquareType.WALL)
+	    return false;
+	try {
+	    return boxes.get(map.openSquareNumbers[coord.y][coord.x]);
+	} catch (ArrayIndexOutOfBoundsException e) {
+	    System.out.println(toString());
+	    System.exit(0);
+	}
+	return false;
     }
     
     public void pushBox(Point coord, Point direction){
 	boxes.set(map.openSquareNumbers[coord.y][coord.x],false);
-	coord.add(direction);
+	coord = coord.add(direction);
 	boxes.set(map.openSquareNumbers[coord.y][coord.x],true);
     }
     
     public MapSquareType getSquare(Point coord){
-	if (coord==player) {
+	if (coord.equals(player)) {
 	    if (map.getSquare(coord) == MapSquareType.GOAL) {
 		return MapSquareType.PLAYER_ON_GOAL;
 	    } else {
@@ -124,12 +134,32 @@ public class GameState {
     @Override
     public String toString(){
 	StringBuilder sb = new StringBuilder();
+	System.out.println(boxes);
 	for (int y=0; y<map.map.length;y++) {
 	    for (int x=0;x<map.map[y].length; x++) {
 		sb.append(getSquare(new Point(x, y)).toString());
+	    }
+	    sb.append("  ");
+	    for (int x=0;x<map.map[y].length; x++) {
+		sb.append(String.format("%02d ",map.openSquareNumbers[y][x]));
 	    }
 	    sb.append("\n");
 	}
 	return sb.toString();
     }
+    
+    @Override
+    public int hashCode() {
+	return boxes.hashCode() + player.hashCode();
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+	if (other==null)
+	    return false;
+	GameState o = (GameState)other;
+	return (o.boxes.equals(boxes) && o.player.equals(player));
+	    
+    }
+    
 }

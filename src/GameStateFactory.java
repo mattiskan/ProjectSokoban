@@ -64,8 +64,10 @@ public class GameStateFactory {
 
 		if(square.getStatic() == MapSquareType.GOAL)
 		    goals.add(new Point(x,y));
-		else if(square.isPlayer())
+		else if(square.isPlayer()) {
+		    cmap[y][x] = square.getStatic();
 		    playerPos = new Point(x,y);
+		}
 	    }
 	}
     }
@@ -83,8 +85,10 @@ public class GameStateFactory {
 	    }
 	    openSquareNumbers[p.y][p.x] = boxPointCounter++;
 	    openSquarePoints.add(p);
-	    if(cmap[p.y][p.x].isBox())
+	    if(cmap[p.y][p.x].isBox()) {
 		boxes.set(boxPointCounter-1);
+		cmap[p.y][p.x] = cmap[p.y][p.x].getStatic();
+	    }
        	    visited.add(p);
 	    if(cmap[p.y][p.x] == MapSquareType.VOID)
 		cmap[p.y][p.x] = MapSquareType.FREE;

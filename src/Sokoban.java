@@ -11,9 +11,11 @@ public class Sokoban {
 
     public Sokoban(){
 	GameState initial = new GameStateFactory().getInitialGameState();
+	System.out.println("dfsfsd:"+initial.hasBox(initial.map.openSquarePoints.get(3)));
+	visited = new HashSet<GameState>();
 	System.out.println(IDAStar(initial));
     }
-
+    public HashSet<GameState> visited;
     // distances should be measured in ints, since
     // comparisons between floats are buggy.
 
@@ -24,6 +26,8 @@ public class Sokoban {
     public String IDAStar(GameState initialState) {
 	int boundary = distance(initialState);
 	while(true) {
+	    visited.clear();
+	    visited.add(initialState);
 	    int t = search(initialState, 0, boundary);
 	    if(t == FOUND) {
 		return "done: " + pathToGoal;
@@ -35,6 +39,7 @@ public class Sokoban {
     }
 
     public int search(GameState node, int g, int boundary) {
+	//System.out.println("fsfs");
         if( node.hasAllBoxesOnGoals() ) {
 	    pathToGoal = node.generatePath();
             return FOUND;
@@ -45,6 +50,9 @@ public class Sokoban {
         }
         int min = Integer.MAX_VALUE;
         for(GameState succ : node.getPossibleMoves()) {
+            if (visited.contains(succ))
+        	continue;
+            visited.add(succ);
             int t = search(succ, g + cost(node, succ), boundary);
             if(t == FOUND) {
                 return FOUND;
@@ -79,6 +87,6 @@ public class Sokoban {
 	    distanceCost += nearest;
 	    goals.remove(nearestOpenGoal);
 	}
-        return 0;
+        return distanceCost;
     }
 }
