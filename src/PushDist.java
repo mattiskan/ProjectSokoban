@@ -2,7 +2,7 @@
 public class PushDist {
     Map map;
     int[][] dist;
-    private static final int INFINITY = 99999;
+    private static final int INFINITY = 999999;
     public PushDist(Map map) {
 	this.map = map;
 	dist = new int[map.map.length][map.map[0].length];
