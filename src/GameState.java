@@ -70,13 +70,9 @@ public class GameState {
     public boolean hasBox(Point coord) {
 	if (map.getSquare(coord) == MapSquareType.WALL)
 	    return false;
-	try {
-	    return boxes.get(map.openSquareNumbers[coord.y][coord.x]);
-	} catch (ArrayIndexOutOfBoundsException e) {
-	    System.out.println(toString());
-	    System.exit(0);
-	}
-	return false;
+
+	return boxes.get(map.openSquareNumbers[coord.y][coord.x]);
+
     }
     
     public void pushBox(Point coord, Point direction){
@@ -127,7 +123,7 @@ public class GameState {
     private void generatePathHelper(GameState child, StringBuilder sb){
 	if(child == null)
 	    return;
-	generatePathHelper(this.parent, sb);
+	child.generatePathHelper(this.parent, sb);
 	sb.append(child.howIGotHere);
     }
 
