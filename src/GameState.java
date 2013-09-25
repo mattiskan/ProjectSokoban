@@ -9,6 +9,12 @@ public class GameState {
 	new Point(0, 1),
 	new Point(0, -1)
     };
+    public static final Point[] reverseMove = {
+	new Point(1, 0),
+	new Point(-1, 0),
+	new Point(0, -1),
+	new Point(0, 1)
+    };
 
     public static final String[] movesToString = {
 	"L", "R", "D", "U"
