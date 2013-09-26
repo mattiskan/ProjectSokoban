@@ -64,7 +64,7 @@ public class GameStateFactory {
 
 		if(square.getStatic() == MapSquareType.GOAL)
 		    goals.add(new Point(x,y));
-		else if(square.isPlayer()) {
+		if(square.isPlayer()) {
 		    cmap[y][x] = square.getStatic();
 		    playerPos = new Point(x,y);
 		}
