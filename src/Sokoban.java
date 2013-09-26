@@ -16,10 +16,6 @@ public class Sokoban {
 	System.out.println(IDAStar(initial));
     }
     public HashSet<GameState> visited;
-    // distances should be measured in ints, since
-    // comparisons between floats are buggy.
-
-    // TODO actually record path taken
 
     String pathToGoal;
 
@@ -45,8 +41,6 @@ public class Sokoban {
 	} catch(Exception e){
 	    
 	}//*/
-	//System.out.println("Done: "+node.openGoalCount());
-	//System.out.println("fsfs");
         if( node.hasAllBoxesOnGoals() ) {
 	    pathToGoal = node.generatePath();
             return FOUND;
@@ -102,6 +96,6 @@ public class Sokoban {
 	    distanceCost += nearest;
 	    goals.remove(nearestOpenGoal);
 	}
-        return distanceCost;
+        return distanceCost*9;
     }
 }
