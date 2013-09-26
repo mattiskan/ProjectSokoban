@@ -39,7 +39,7 @@ public class Sokoban {
     }
 
     public int search(GameState node, int g, int boundary) {
-        /*try{
+        try{
           System.out.println(node);
           Thread.sleep(1000);
           } catch(Exception e){
