@@ -25,6 +25,7 @@ public class Sokoban {
 
     public String IDAStar(GameState initialState) {
 	int boundary = distance(initialState);
+	boundary = 100;
 	while(true) {
 	    visited.clear();
 	    visited.add(initialState);
@@ -39,9 +40,9 @@ public class Sokoban {
     }
 
     public int search(GameState node, int g, int boundary) {
-	try{
+	/*try{
 	    System.out.println(node);
-	    Thread.sleep(300);
+	    Thread.sleep(3000);
 	} catch(Exception e){
 	    
 	}//*/
@@ -75,7 +76,6 @@ public class Sokoban {
 
     public int distance(GameState current) {
 	int distanceCost = 0;
-
 	ArrayList<Point> boxes = current.getBoxes();
 	HashSet<Point> goals = current.map.getGoals();
 

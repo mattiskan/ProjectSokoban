@@ -16,18 +16,18 @@ public class GameState {
 	new Point(0, 1)
     };
 
-    public static final String[] movesToString = {
-	"L", "R", "D", "U"
+    public static final char[] moveToChar = {
+        'L', 'R', 'D', 'U'
     };
     
     public static Map map;
     public BitSet boxes;
     public Point player;
-    String howIGotHere;
+    MoveSeq moveSeq;
     
     public GameState parent;
 
-    public GameState(GameState prev, Point newPlayerPosBeforeMovement, Point direction, String howIGotHere) {
+    public GameState(GameState prev, Point newPlayerPosBeforeMovement, Point direction, MoveSeq moveSeq) {
 	parent = prev;
 	this.boxes = (BitSet)prev.boxes.clone();
 	Point newPos = newPlayerPosBeforeMovement.add(direction);
@@ -35,17 +35,22 @@ public class GameState {
 	    pushBox(newPos, direction);
 	}
 	player = newPos;
-	this.howIGotHere=howIGotHere;
+	this.moveSeq=moveSeq;
     }
 
     public GameState(Point player, BitSet boxes, Map cmap) {
 	this.player = player;
 	this.boxes = boxes;
 	map = cmap;
-	howIGotHere = "";
+	moveSeq = new MoveSeq();
     }
 
     public List<GameState> getPossibleMoves() {
+	return new PlayerMoves(this).getPossibleStates();
+    }
+
+    /* Gammal och ersatt av PlayerMoves.class
+      public List<GameState> getPossibleMoves() {
 	ArrayList<GameState> possibleMoves = new ArrayList<GameState>();
 	for(int d=0; d<4; d++){
 	    Point direction = move[d];
@@ -53,10 +58,10 @@ public class GameState {
 
 	    MapSquareType nextSquare = getSquare(nextPos);
 	    if(nextSquare.isOpen() || nextSquare.isBox() && getSquare(nextPos.add(direction)).isOpen())
-		possibleMoves.add(new GameState(this, player, direction, movesToString[d]));
+		possibleMoves.add(new GameState(this, player, direction, moveToString[d]));
 	}
 	return possibleMoves;
-    }
+	}*/
 
     private ArrayList<Point> boxList;
     public ArrayList<Point> getBoxes() {
@@ -119,16 +124,7 @@ public class GameState {
     }
     
     public String generatePath(){
-	StringBuilder sb = new StringBuilder();
-	generatePathHelper(sb);
-	return sb.toString();
-    }
-
-    private void generatePathHelper(StringBuilder sb){
-	if(parent == null)
-	    return;
-	parent.generatePathHelper(sb);
-	sb.append(this.howIGotHere);
+	return moveSeq.toString();
     }
 
     @Override
