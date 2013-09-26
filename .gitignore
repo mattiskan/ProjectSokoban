@@ -5,7 +5,6 @@
 *.tmp
 *\#*
 
-
 # Package Files #
 *.jar
 *.war
@@ -16,3 +15,5 @@
 *.tar*
 *.rar
 *.gz
+
+maps/level_mattis

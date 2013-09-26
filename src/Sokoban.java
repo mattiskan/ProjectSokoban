@@ -2,18 +2,18 @@ import java.util.*;
 
 public class Sokoban {
     public static void main(String[] args){
-	new Sokoban();
+        new Sokoban();
     }
-    
+
     public static final int FOUND = -1,
-	                    NOT_FOUND = -2;
+           NOT_FOUND = -2;
 
 
     public Sokoban(){
-	GameState initial = new GameStateFactory().getInitialGameState();
-	System.out.println("dfsfsd:"+initial.hasBox(initial.map.openSquarePoints.get(3)));
-	visited = new HashSet<GameState>();
-	System.out.println(IDAStar(initial));
+        GameState initial = new GameStateFactory().getInitialGameState();
+        //System.out.println("dfsfsd:"+initial.hasBox(initial.map.openSquarePoints.get(3)));
+        visited = new HashSet<GameState>();
+        System.out.println(IDAStar(initial));
     }
     public HashSet<GameState> visited;
     // distances should be measured in ints, since
@@ -24,30 +24,31 @@ public class Sokoban {
     String pathToGoal;
 
     public String IDAStar(GameState initialState) {
-	int boundary = distance(initialState);
-	while(true) {
-	    visited.clear();
-	    visited.add(initialState);
-	    int t = search(initialState, 0, boundary);
-	    if(t == FOUND) {
-		return "done: " + pathToGoal;
-	    } else if(t == NOT_FOUND) {
-		return "Path not found";
-	    }
-	    boundary = t;
-	}
+        int boundary = distance(initialState);
+        while(true) {
+            visited.clear();
+            visited.add(initialState);
+            int t = search(initialState, 0, boundary);
+            if(t == FOUND) {
+                return pathToGoal;
+            } else if(t == NOT_FOUND) {
+                return "Path not found";
+            }
+            boundary = t;
+        }
     }
 
     public int search(GameState node, int g, int boundary) {
-	try{
-	    System.out.println(node);
-	    Thread.sleep(300);
-	} catch(Exception e){
-	    
-	}//*/
-	//System.out.println("fsfs");
+        try{
+          System.out.println(node);
+          Thread.sleep(1000);
+          } catch(Exception e){
+
+          }//*/
+        //System.out.println("Done: "+node.openGoalCount());
+        //System.out.println("fsfs");
         if( node.hasAllBoxesOnGoals() ) {
-	    pathToGoal = node.generatePath();
+            pathToGoal = node.generatePath();
             return FOUND;
         }
         int f = g + distance(node);
@@ -57,8 +58,10 @@ public class Sokoban {
         int min = Integer.MAX_VALUE;
         for(GameState succ : node.getPossibleMoves()) {
             if (visited.contains(succ))
-        	continue;
+                continue;
             visited.add(succ);
+            if(Deadlock.isDeadlock(succ))
+                continue;
             int t = search(succ, g + cost(node, succ), boundary);
             if(t == FOUND) {
                 return FOUND;
@@ -74,25 +77,24 @@ public class Sokoban {
     }
 
     public int distance(GameState current) {
-	int distanceCost = 0;
+        int distanceCost = 0;
+        ArrayList<Point> boxes = current.getBoxes();
+        HashSet<Point> goals = current.map.getGoals();
 
-	ArrayList<Point> boxes = current.getBoxes();
-	HashSet<Point> goals = current.map.getGoals();
+        for(Point box : boxes) {
+            int nearest = Integer.MAX_VALUE;
+            Point nearestOpenGoal = null;
+            for(Point goal : goals){
+                int distanceTo = box.manhattanDist(goal);
+                if( distanceTo < nearest ){
+                    nearest = distanceTo;
+                    nearestOpenGoal = goal;
+                }
+            }
 
-	for(Point box : boxes) {
-	    int nearest = Integer.MAX_VALUE;
-	    Point nearestOpenGoal = null;
-	    for(Point goal : goals){
-		int distanceTo = box.manhattanDist(goal);
-		if( distanceTo < nearest ){
-		    nearest = distanceTo;
-		    nearestOpenGoal = goal;
-		}
-	    }
-
-	    distanceCost += nearest;
-	    //goals.remove(nearestOpenGoal);
-	}
+            distanceCost += GameState.map.distance(box);
+            goals.remove(nearestOpenGoal);
+        }
         return distanceCost;
     }
 }
