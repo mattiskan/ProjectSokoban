@@ -1,8 +1,10 @@
 public class MoveSeq {
-    MoveSeq parent;
-    char move;
+    final MoveSeq parent;
+    final char move;
 
     public MoveSeq(){
+	parent = null;
+	move = 0;
     }
     
     public MoveSeq(MoveSeq parent, char move){

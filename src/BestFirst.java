@@ -51,8 +51,28 @@ public class BestFirst {
 	    return value - other.value;
 	}
     }
-    
-    private int distance(GameState state) {
+    public int distance(GameState current) {
+	int distanceCost = 0;
+	ArrayList<Point> boxes = current.getBoxes();
+	HashSet<Point> goals = current.map.getGoals();
+
+	for(Point box : boxes) {
+	    int nearest = Integer.MAX_VALUE;
+	    Point nearestOpenGoal = null;
+	    for(Point goal : goals){
+		int distanceTo = box.manhattanDist(goal);
+		if( distanceTo < nearest ){
+		    nearest = distanceTo;
+		    nearestOpenGoal = goal;
+		}
+	    }
+
+	    distanceCost += GameState.map.distance(box);
+	    goals.remove(nearestOpenGoal);
+	}
+        return distanceCost;
+    }
+    /*private int distance(GameState state) {
 	int distance = 0;
 	for (Point b : state.getBoxes()) {
 	    int best = Integer.MAX_VALUE;
@@ -62,5 +82,5 @@ public class BestFirst {
 	    distance += best;
 	}
 	return distance;
-    }
+    }*/
 }
