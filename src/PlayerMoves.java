@@ -32,7 +32,8 @@ public class PlayerMoves {
 		if(visited.contains(nextSquare))
 		   continue;
 		if(gs.hasBox(nextSquare)){
-		    if(gs.getSquare(nextSquare.add(dir)).isOpen()){
+		    Point to = nextSquare.add(dir);
+		    if(gs.getSquare(to).isOpen() && !GameState.map.isDeadSquare(to)){
 			possiblePaths.add(new GameState(gs, current.p, dir, new MoveSeq(current.m, gs.moveToChar[d])));
 		    }
 		} else if(gs.getSquare(nextSquare).isOpen()) {

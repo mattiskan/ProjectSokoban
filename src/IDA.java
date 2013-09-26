@@ -1,28 +1,12 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 
-public class Sokoban {
-    public static void main(String[] args){
-	new Sokoban();
-    }
-    
+public class IDA {
     public static final int FOUND = -1,
-	                    NOT_FOUND = -2;
+	    		NOT_FOUND = -2;
 
-
-    public Sokoban(){
-	GameState initial = new GameStateFactory().getInitialGameState();
-	//System.out.println("dfsfsd:"+initial.hasBox(initial.map.openSquarePoints.get(3)));
-	visited = new HashSet<GameState>();
-	System.out.println(IDAStar(initial));
-    }
-    public HashSet<GameState> visited;
-    // distances should be measured in ints, since
-    // comparisons between floats are buggy.
-
-    // TODO actually record path taken
-
+    HashSet<GameState> visited = new HashSet<GameState>();
     String pathToGoal;
-
     public String IDAStar(GameState initialState) {
 	int boundary = distance(initialState);
 	while(true) {
@@ -30,7 +14,7 @@ public class Sokoban {
 	    visited.add(initialState);
 	    int t = search(initialState, 0, boundary);
 	    if(t == FOUND) {
-		return pathToGoal;
+		return "done: " + pathToGoal;
 	    } else if(t == NOT_FOUND) {
 		return "Path not found";
 	    }
@@ -39,13 +23,6 @@ public class Sokoban {
     }
 
     public int search(GameState node, int g, int boundary) {
-	/*try{
-	    System.out.println(node);
-	    Thread.sleep(1000);
-	} catch(Exception e){
-	    
-	}//*/
-	//System.out.println("Done: "+node.openGoalCount());
 	//System.out.println("fsfs");
         if( node.hasAllBoxesOnGoals() ) {
 	    pathToGoal = node.generatePath();
@@ -76,11 +53,12 @@ public class Sokoban {
 
     public int distance(GameState current) {
 	int distanceCost = 0;
+
 	ArrayList<Point> boxes = current.getBoxes();
-	HashSet<Point> goals = current.map.getGoals();
+	//HashSet<Point> goals = GameState.map.getGoals();
 
 	for(Point box : boxes) {
-	    int nearest = Integer.MAX_VALUE;
+	    /*int nearest = Integer.MAX_VALUE;
 	    Point nearestOpenGoal = null;
 	    for(Point goal : goals){
 		int distanceTo = box.manhattanDist(goal);
@@ -88,10 +66,10 @@ public class Sokoban {
 		    nearest = distanceTo;
 		    nearestOpenGoal = goal;
 		}
-	    }
+	    }*/
 
-	    distanceCost += GameState.map.distance(box);
-	    goals.remove(nearestOpenGoal);
+	    //distanceCost += GameState.map.distance(box);//nearest;
+	    //goals.remove(nearestOpenGoal);
 	}
         return distanceCost;
     }

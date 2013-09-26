@@ -7,6 +7,7 @@ public class Map {
     public int[][] openSquareNumbers;
     public ArrayList<Point> openSquarePoints;
     private HashSet<Point> goals;
+    public PushDist dist;
     
     public static void main(String[] args){
     }
@@ -16,6 +17,7 @@ public class Map {
 	this.openSquareNumbers = openSquareNumbers;
 	this.openSquarePoints = openSquarePoints;
 	this.goals = goals;
+	dist = new PushDist(this);
     }
 
     public MapSquareType getSquare(Point coord){
@@ -41,5 +43,12 @@ public class Map {
 	    sb.append('\n');
 	}
 	return sb.toString();
+    }
+    public int distance(Point p) {
+	return dist.distance(p);
+    }
+    
+    public boolean isDeadSquare(Point p) {
+	return dist.deadSquare(p);
     }
 }
