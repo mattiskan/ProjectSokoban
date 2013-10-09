@@ -37,7 +37,7 @@ public class Sokoban {
     public int search(GameState node, int g, int boundary) {
 	/*try{
 	    System.out.println(node);
-	    Thread.sleep(100);
+	    Thread.sleep(1000);
 	} catch(Exception e){
 	    
 	}//*/
@@ -61,8 +61,6 @@ public class Sokoban {
             if (visited.contains(succ))
         	continue;
             visited.add(succ);
-            if(Deadlock.isDeadlock(succ))
-                continue;
             int t = search(succ, g+1, boundary);
             if(t == FOUND) {
                 return FOUND;

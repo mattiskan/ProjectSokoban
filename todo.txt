@@ -1,0 +1,15 @@
+Todo:
+
+- Fixa deadlockcheck <--- axel
+  Den typ hittar deadlocks som inte är deadlocks?
+
+- Flytta gubben till vänster innan hashen <----- mattis
+  Borde kunna klippa grenar till viss merkostnad
+
+- Bidirectional search
+  Skapa en till dynamisk karta som går baklänges, lägg till stöd i den statiska kartan för två uppsättningar mål. Sök från två håll.
+
+- Ungersk matchning
+  Matcha och försök springa med lådor till specifika mål
+
+- Spring med en låda först

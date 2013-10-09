@@ -34,7 +34,9 @@ public class PlayerMoves {
 		if(gs.hasBox(nextSquare)){
 		    Point to = nextSquare.add(dir);
 		    if(gs.getSquare(to).isOpen() && !GameState.map.isDeadSquare(to)){
-			possiblePaths.add(new GameState(gs, current.p, dir, new MoveSeq(current.m, GameState.moveToChar[d])));
+			GameState possibleNextState = new GameState(gs, current.p, dir, new MoveSeq(current.m, GameState.moveToChar[d]));
+			if(!Deadlock.isDeadlock(possibleNextState, to))
+			    possiblePaths.add(possibleNextState);
 		    }
 		} else if(gs.getSquare(nextSquare).isOpen()) {
 		    q.addFirst(new BFSRecord(nextSquare, new MoveSeq(current.m, GameState.moveToChar[d])));

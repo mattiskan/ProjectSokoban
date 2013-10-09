@@ -7,16 +7,13 @@ public class Deadlock {
 * Checks whether there are any boxes that aren't on a goal and that
 * can't move.
 */
-    public static boolean isDeadlock(GameState gs) {
-        List<Point> boxes = gs.getBoxes();
-        for(Point box : boxes) {
-            if(!isBoxOnGoal(gs, box)) {
-                if(isDeadlock(gs, box, new HashSet<Point>())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public static boolean isDeadlock(GameState gs, Point box) {
+	if(!isBoxOnGoal(gs, box)) {
+	    if(isDeadlock(gs, box, new HashSet<Point>())) {
+		return true;
+	    }
+	}
+        return false; // annars: return false. Det här är en nödvändig kommentar. Viktigaste raden i hela projektet. minst.
     }
 
     public static boolean isBoxOnGoal(GameState gs, Point point) {
@@ -36,7 +33,9 @@ public class Deadlock {
         visited.add(point);
         for (int i=0; i<4; i+=2) {
             if (!isDeadlock(gs, point.add(GameState.move[i]), visited) && !isDeadlock(gs, point.add(GameState.reverseMove[i]), visited)) {
+		visited.remove(point);
         	return false;
+		// this is where axel likes to do his personal stuff.
             } 
         }
         return true;
