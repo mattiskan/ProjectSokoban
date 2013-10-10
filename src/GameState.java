@@ -23,6 +23,7 @@ public class GameState implements Comparable<GameState> {
     public static Map map;
     public BitSet boxes;
     public Point player;
+    public Point leftmostPos; //vänstraste positionen spelaren kan nå, används vid hash.
     MoveSeq moveSeq;
     public int score;
 
@@ -42,6 +43,7 @@ public class GameState implements Comparable<GameState> {
 
     public GameState(Point player, BitSet boxes, Map cmap) {
 	this.player = player;
+	leftmostPos = player;
 	this.boxes = boxes;
 	map = cmap;
 	moveSeq = new MoveSeq();
@@ -51,19 +53,9 @@ public class GameState implements Comparable<GameState> {
 	return new PlayerMoves(this).getPossibleStates();
     }
 
-    /* Gammal och ersatt av PlayerMoves.class
-      public List<GameState> getPossibleMoves() {
-	ArrayList<GameState> possibleMoves = new ArrayList<GameState>();
-	for(int d=0; d<4; d++){
-	    Point direction = move[d];
-	    Point nextPos = player.add(direction);
-
-	    MapSquareType nextSquare = getSquare(nextPos);
-	    if(nextSquare.isOpen() || nextSquare.isBox() && getSquare(nextPos.add(direction)).isOpen())
-		possibleMoves.add(new GameState(this, player, direction, moveToString[d]));
-	}
-	return possibleMoves;
-	}*/
+    public void setLeftmostPos(Point leftmostPos){
+	this.leftmostPos = leftmostPos;
+    }
 
     private ArrayList<Point> boxList;
     public ArrayList<Point> getBoxes() {
@@ -148,7 +140,7 @@ public class GameState implements Comparable<GameState> {
     
     @Override
     public int hashCode() {
-	return boxes.hashCode() + player.hashCode();
+	return boxes.hashCode() + leftmostPos.hashCode();
     }
     
     @Override
@@ -156,7 +148,7 @@ public class GameState implements Comparable<GameState> {
 	if (other==null)
 	    return false;
 	GameState o = (GameState)other;
-	return (o.boxes.equals(boxes) && o.player.equals(player));
+	return (o.boxes.equals(boxes) && o.leftmostPos.equals(leftmostPos));
 	    
     }
     

@@ -16,16 +16,20 @@ public class PlayerMoves {
 
     public ArrayList<GameState> getPossibleStates(){
 	bfs();
+	gs.setLeftmostPos(leftmostPos);
 	return possiblePaths;
     }
 
+    private Point leftmostPos;
     private void bfs(){
 	q.addFirst(new BFSRecord(gs.player, gs.moveSeq));
+
+	leftmostPos = gs.player;
 	visited[gs.player.y][gs.player.x] = true;
 
 	while(!q.isEmpty()){
 	    BFSRecord current = q.removeLast();
-	    
+
 	    for(int d=0; d<4; d++){
 		Point dir = GameState.move[d];
 		Point nextSquare = current.p.add(dir);
@@ -41,9 +45,17 @@ public class PlayerMoves {
 		} else if(gs.getSquare(nextSquare).isOpen()) {
 		    q.addFirst(new BFSRecord(nextSquare, new MoveSeq(current.m, GameState.moveToChar[d])));
 		    visited[nextSquare.y][nextSquare.x] = true;
+
+		    if(isLeftermostPos(nextSquare)) {
+			leftmostPos = nextSquare;
+		    }
 		}
 	    }
 	}
+    }
+
+    private boolean isLeftermostPos(Point p){
+	return p.x < leftmostPos.x ||  p.x == leftmostPos.x && p.y < leftmostPos.y;
     }
 
     private class BFSRecord {

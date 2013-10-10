@@ -8,6 +8,8 @@ public class Sokoban {
     public static final int FOUND = -1,
 	                    NOT_FOUND = -2;
 
+    public static final int MATTIS_KONSTANT = 7;
+
 
     public Sokoban(){
 	GameState initial = new GameStateFactory().getInitialGameState();
@@ -23,7 +25,6 @@ public class Sokoban {
 	int boundary = distance(initialState);
 	while(true) {
 	    visited.clear();
-	    visited.add(initialState);
 	    int t = search(initialState, 0, boundary);
 	    if(t == FOUND) {
 		return pathToGoal;
@@ -51,16 +52,16 @@ public class Sokoban {
         }
         int min = Integer.MAX_VALUE;
         List<GameState> possibleMoves = node.getPossibleMoves();
+	if (visited.contains(node))
+	    return Integer.MAX_VALUE - 1000;//ett stort värde
+	visited.add(node);
+
         for (GameState gs : possibleMoves) {
             gs.score = g + distance(gs);
         }
         Collections.sort(possibleMoves);
-
         
         for(GameState succ : possibleMoves) {
-            if (visited.contains(succ))
-        	continue;
-            visited.add(succ);
             int t = search(succ, g+1, boundary);
             if(t == FOUND) {
                 return FOUND;
@@ -94,6 +95,6 @@ public class Sokoban {
 	    distanceCost += nearest;
 	    goals.remove(nearestOpenGoal);
 	}
-        return distanceCost*9;
+        return distanceCost*MATTIS_KONSTANT;
     }
 }
