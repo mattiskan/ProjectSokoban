@@ -4,14 +4,23 @@ public class PlayerMoves {
     GameState gs;
 
     ArrayList<GameState> possiblePaths;
-    boolean[][] visited;
+    static boolean[][] visited;
     ArrayDeque<BFSRecord> q;
 
     public PlayerMoves(GameState gs){
 	this.gs = gs;
-	visited = new boolean[GameState.map.map.length][GameState.map.map[0].length];
+	if(visited == null)
+	    visited = new boolean[GameState.map.map.length][GameState.map.map[0].length];
+	else
+	    clearVisitedMatrix();
 	q = new ArrayDeque<BFSRecord>();
 	possiblePaths = new ArrayList<GameState>();
+    }
+
+    private void clearVisitedMatrix(){
+	for(int i=0; i<visited.length; i++)
+	    for(int j=0; j<visited[0].length; j++)
+	        visited[i][j] = false;
     }
 
     public ArrayList<GameState> getPossibleStates(){

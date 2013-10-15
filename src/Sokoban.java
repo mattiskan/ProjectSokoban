@@ -8,7 +8,7 @@ public class Sokoban {
     public static final int FOUND = -1,
 	                    NOT_FOUND = -2;
 
-    public static final int MATTIS_KONSTANT = 7;
+    public static final int MATTIS_KONSTANT = 5;
 
 
     public Sokoban(){
@@ -50,8 +50,10 @@ public class Sokoban {
         if(node.score > boundary) {
             return node.score;
         }
+
         int min = Integer.MAX_VALUE;
         List<GameState> possibleMoves = node.getPossibleMoves();
+
 	if (visited.contains(node))
 	    return Integer.MAX_VALUE - 1000;//ett stort värde
 	visited.add(node);
