@@ -9,7 +9,7 @@ Todo:
 - Bidirectional search
   Skapa en till dynamisk karta som går baklänges, lägg till stöd i den statiska kartan för två uppsättningar mål. Sök från två håll.
 
-- Ungersk matchning
+- Ungersk matchning <---- Niclas
   Matcha och försök springa med lådor till specifika mål
 
 - Spring med en låda först
