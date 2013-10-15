@@ -2,48 +2,50 @@ import java.util.*;
 
 public class Sokoban {
     public static void main(String[] args){
-	new Sokoban();
+        new Sokoban();
     }
-    
+
     public static final int FOUND = -1,
-	                    NOT_FOUND = -2;
+           NOT_FOUND = -2;
 
     public static final int MATTIS_KONSTANT = 5;
-
+    public static final int NICLAS_KONSTANT = 3;
+    public static final int GUNNINGS_KONSTANT = 9;
+    public static final int AXELS_KONSTANT = 2;
 
     public Sokoban(){
-	GameState initial = new GameStateFactory().getInitialGameState();
-	//System.out.println("dfsfsd:"+initial.hasBox(initial.map.openSquarePoints.get(3)));
-	visited = new HashSet<GameState>();
-	System.out.println(IDAStar(initial));
+        GameState initial = new GameStateFactory().getInitialGameState();
+        //System.out.println("dfsfsd:"+initial.hasBox(initial.map.openSquarePoints.get(3)));
+        visited = new HashSet<GameState>();
+        System.out.println(IDAStar(initial));
     }
     public HashSet<GameState> visited;
 
     String pathToGoal;
 
     public String IDAStar(GameState initialState) {
-	int boundary = distance(initialState);
-	while(true) {
-	    visited.clear();
-	    int t = search(initialState, 0, boundary);
-	    if(t == FOUND) {
-		return pathToGoal;
-	    } else if(t == NOT_FOUND) {
-		return "Path not found";
-	    }
-	    boundary = t;
-	}
+        int boundary = distance(initialState);
+        while(true) {
+            visited.clear();
+            int t = search(initialState, 0, boundary);
+            if(t == FOUND) {
+                return pathToGoal;
+            } else if(t == NOT_FOUND) {
+                return "Path not found";
+            }
+            boundary = t;
+        }
     }
 
     public int search(GameState node, int g, int boundary) {
-	/*try{
-	    System.out.println(node);
-	    Thread.sleep(1000);
-	} catch(Exception e){
-	    
-	}//*/
+        /*try{
+          System.out.println(node);
+          Thread.sleep(1000);
+          } catch(Exception e){
+
+          }//*/
         if( node.hasAllBoxesOnGoals() ) {
-	    pathToGoal = node.generatePath();
+            pathToGoal = node.generatePath();
             return FOUND;
         }
 
@@ -54,15 +56,15 @@ public class Sokoban {
         int min = Integer.MAX_VALUE;
         List<GameState> possibleMoves = node.getPossibleMoves();
 
-	if (visited.contains(node))
-	    return Integer.MAX_VALUE - 1000;//ett stort värde
-	visited.add(node);
+        if (visited.contains(node))
+            return Integer.MAX_VALUE - 1000;//ett stort värde
+        visited.add(node);
 
         for (GameState gs : possibleMoves) {
             gs.score = g + distance(gs);
         }
         Collections.sort(possibleMoves);
-        
+
         for(GameState succ : possibleMoves) {
             int t = search(succ, g+1, boundary);
             if(t == FOUND) {
@@ -78,25 +80,46 @@ public class Sokoban {
         return 1;
     }
 
+    public int distance(GameState gState) {
+        List<Point> boxes = gState.getBoxes();
+        HashSet<Point> goals = GameState.map.getGoals();
+        int[][] distanceMatrix = new int[boxes.size()][goals.size()];
+
+        int i = 0;
+        int j = 0;
+        for(Point box : boxes) {
+            for(Point goal : goals) {
+                distanceMatrix[i][j] = box.manhattanDist(goal);
+                j++;
+            }
+            i++;
+            j = 0;
+        }
+
+        return Hungarian.hungarianCost(distanceMatrix) * NICLAS_KONSTANT;
+    }
+
+    /*
     public int distance(GameState current) {
-	int distanceCost = 0;
-	ArrayList<Point> boxes = current.getBoxes();
-	HashSet<Point> goals = GameState.map.getGoals();
+        int distanceCost = 0;
+        ArrayList<Point> boxes = current.getBoxes();
+        HashSet<Point> goals = GameState.map.getGoals();
 
-	for(Point box : boxes) {
-	    int nearest = Integer.MAX_VALUE;
-	    Point nearestOpenGoal = null;
-	    for(Point goal : goals){
-		int distanceTo = box.manhattanDist(goal);
-		if( distanceTo < nearest ){
-		    nearest = distanceTo;
-		    nearestOpenGoal = goal;
-		}
-	    }
+        for(Point box : boxes) {
+            int nearest = Integer.MAX_VALUE;
+            Point nearestOpenGoal = null;
+            for(Point goal : goals){
+                int distanceTo = box.manhattanDist(goal);
+                if( distanceTo < nearest ){
+                    nearest = distanceTo;
+                    nearestOpenGoal = goal;
+                }
+            }
 
-	    distanceCost += nearest;
-	    goals.remove(nearestOpenGoal);
-	}
+            distanceCost += nearest;
+            goals.remove(nearestOpenGoal);
+        }
         return distanceCost*MATTIS_KONSTANT;
     }
+    */
 }
