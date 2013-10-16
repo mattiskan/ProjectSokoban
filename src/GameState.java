@@ -37,6 +37,16 @@ public class GameState implements Comparable<GameState> {
 	if(getSquare(newPos).isBox()) {
 	    pushBox(newPos, direction);
 	}
+	while (true) {
+	    Point next = newPos.add(direction);
+	    Point nextNext = next.add(direction);
+	    if (!getSquare(nextNext).isOpen() || !map.isTunnel(next) || !map.isTunnel(nextNext) || map.getSquare(next)==MapSquareType.GOAL) {
+		break;
+	    }
+	    pushBox(next, direction);
+	    newPos = next;
+	}
+	
 	player = newPos;
 	this.moveSeq=moveSeq;
     }

@@ -21,6 +21,8 @@ public class Map {
         this.goals = goals;
         dist = new PushDist(this);
         findAndSetTunnelSquares();
+	//System.out.println(this);
+	//System.exit(0);
     }
 
     public MapSquareType getSquare(Point coord){
@@ -37,25 +39,28 @@ public class Map {
         for(int i = 1; i < map.length-1; i++) {
             for(int j = 1; j < map[0].length-1; j++) {
                 if(map[i][j] != null && map[i][j] != MapSquareType.WALL) {
-                    if(map[i-1][j] == MapSquareType.WALL && map[i+1][j] == MapSquareType.WALL &&
-                       map[i][j-1] != MapSquareType.WALL && map[i][j+1] != MapSquareType.WALL ||
-                       map[i][j-1] == MapSquareType.WALL && map[i][j+1] == MapSquareType.WALL &&
-                       map[i-1][j] != MapSquareType.WALL && map[i+1][j] != MapSquareType.WALL) {
-                        tunnel[i][j] = true;
-                    }
-                }
+		    int wallCount = 0;
+		    for (int x=0; x<4; x++) {
+			if (map[i+GameState.move[x].y][j+GameState.move[x].x] == MapSquareType.WALL) {
+			    wallCount++;
+			}
+		    }
+		    if (wallCount >= 2) {
+			tunnel[i][j] = true;
+		    }
+                } 
             }
         }
     }
 
     @SuppressWarnings("unchecked")
-        public HashSet<Point> getGoals(){
+    public HashSet<Point> getGoals(){
 	return (HashSet<Point>) goals.clone();
     }
 
     @Override
 
-        public String toString(){
+    public String toString(){
 	StringBuilder sb = new StringBuilder();
 	for(MapSquareType[] row : map){
 	    for(MapSquareType col : row)
@@ -63,6 +68,12 @@ public class Map {
 		    sb.append(col.toString());
 
 	    sb.append('\n');
+	}
+	for (int i=0; i<tunnel.length;i++) {
+	    for (int j=0; j<tunnel[0].length; j++) {
+		sb.append(tunnel[i][j] ? "T ":"-");
+	    }
+	    sb.append("\n");
 	}
 	return sb.toString();
     }
