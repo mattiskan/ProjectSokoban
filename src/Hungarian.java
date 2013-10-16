@@ -112,22 +112,35 @@ public class Hungarian {
         numRows = distanceMatrix.length;
         numCols = distanceMatrix[0].length;
 
-        originalMatrix = new int[numRows][numCols];
+	if(originalMatrix == null)
+	    originalMatrix = new int[numRows][numCols];
         for(int r = 0; r < numRows; r++)
             for(int c = 0; c < numCols; c++)
                 originalMatrix[r][c] = distanceMatrix[r][c];
 
         C = distanceMatrix;
-        M = new int[numRows][numCols];
+
+	M = cleanMatrix(M, numRows, numCols);
+
         rowCover = new int[numRows];
         colCover = new int[numCols];
 
         path_row_0 = 0;
         path_col_0 = 0;
         path_count = 0;
-        path = new int[numRows * 3][2]; // just have large number of elements
+        path = cleanMatrix(path, numRows*3, 2);//new int[numRows * 3][2]; // just have large number of elements
 
         nextStep = 1;
+    }
+
+    private static int[][] cleanMatrix(int[][] m, int r, int c){
+	if(m == null)
+	    m = new int[r][c];
+	else
+	    for(int i=0; i<r; i++)
+		for(int j=0; j<c; j++)
+		    m[i][j] = 0;
+	return m;
     }
 
     private static int retreiveSum() {
@@ -318,11 +331,10 @@ public class Hungarian {
     private static P find_a_zero(int row, int col) {
         int r = 0;
         int c = 0;
-        boolean done = false;
         row = -1;
         col = -1;
 
-        while(!done) {
+        while(true) {
             c = 0;
 
             while(true) {
@@ -337,7 +349,7 @@ public class Hungarian {
             }
             r++;
             if(r >= numRows)
-                done = true;
+		break;
         }
 
         return new P(row, col);

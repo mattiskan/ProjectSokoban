@@ -81,10 +81,13 @@ public class Sokoban {
         return 1;
     }
 
+    static int[][] distanceMatrix;
+
     public int distance(GameState gState) {
         List<Point> boxes = gState.getBoxes();
         HashSet<Point> goals = GameState.map.getGoals();
-        int[][] distanceMatrix = new int[boxes.size()][goals.size()];
+	
+        clearDistanceMatrix(boxes.size(), goals.size());
 
         int i = 0;
         for(Point box : boxes) {
@@ -95,6 +98,15 @@ public class Sokoban {
         }
 
         return Hungarian.hungarianCost(distanceMatrix) * MATTIS_KONSTANT;
+    }
+
+    private void clearDistanceMatrix(int r, int c){
+	if(distanceMatrix == null)
+	    distanceMatrix = new int[r][c];
+
+	for(int i=0; i<distanceMatrix.length; i++)
+	    for(int j=0; j<distanceMatrix[0].length; j++)
+		distanceMatrix[i][j] = 0;
     }
 
     /*
