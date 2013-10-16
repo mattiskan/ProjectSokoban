@@ -50,41 +50,25 @@ public class Map {
 
     @SuppressWarnings("unchecked")
         public HashSet<Point> getGoals(){
-            return (HashSet<Point>) goals.clone();
-        }
-
-    @Override
-<<<<<<< HEAD
-        public String toString(){
-            StringBuilder sb = new StringBuilder();
-            for(MapSquareType[] row : map){
-                for(MapSquareType col : row)
-                    if(col != null)
-                        sb.append(col.toString());
-
-                sb.append('\n');
-            }
-            return sb.toString();
-        }
-    public int distance(Point p) {
-        return dist.distance(p);
+	return (HashSet<Point>) goals.clone();
     }
 
-=======
-    public String toString(){
+    @Override
+
+        public String toString(){
 	StringBuilder sb = new StringBuilder();
 	for(MapSquareType[] row : map){
 	    for(MapSquareType col : row)
 		if(col != null)
 		    sb.append(col.toString());
-	     
+
 	    sb.append('\n');
 	}
 	return sb.toString();
     }
 
-    
->>>>>>> b51f6dd147c9be4eb71cf34d228808ee1e5288b0
+
+
     public boolean isDeadSquare(Point p) {
         return dist.deadSquare(p);
     }
