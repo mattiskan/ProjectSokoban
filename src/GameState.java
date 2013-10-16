@@ -43,6 +43,7 @@ public class GameState implements Comparable<GameState> {
 	    if (!getSquare(nextNext).isOpen() || !map.isTunnel(next) || !map.isTunnel(nextNext) || map.getSquare(next)==MapSquareType.GOAL) {
 		break;
 	    }
+	    moveSeq = new MoveSeq(moveSeq, moveSeq.move);
 	    pushBox(next, direction);
 	    newPos = next;
 	}
