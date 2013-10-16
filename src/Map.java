@@ -7,7 +7,7 @@ public class Map {
     public int openSquares;
     public int[][] openSquareNumbers;
     public ArrayList<Point> openSquarePoints;
-    private HashSet<Point> goals;
+    public HashSet<Point> goals;
     public PushDist dist;
 
     public static void main(String[] args){
@@ -54,6 +54,7 @@ public class Map {
         }
 
     @Override
+<<<<<<< HEAD
         public String toString(){
             StringBuilder sb = new StringBuilder();
             for(MapSquareType[] row : map){
@@ -69,6 +70,21 @@ public class Map {
         return dist.distance(p);
     }
 
+=======
+    public String toString(){
+	StringBuilder sb = new StringBuilder();
+	for(MapSquareType[] row : map){
+	    for(MapSquareType col : row)
+		if(col != null)
+		    sb.append(col.toString());
+	     
+	    sb.append('\n');
+	}
+	return sb.toString();
+    }
+
+    
+>>>>>>> b51f6dd147c9be4eb71cf34d228808ee1e5288b0
     public boolean isDeadSquare(Point p) {
         return dist.deadSquare(p);
     }
