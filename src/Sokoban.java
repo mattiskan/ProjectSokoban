@@ -26,6 +26,7 @@ public class Sokoban {
     public String IDAStar(GameState initialState) {
         int boundary = distance(initialState);
         while(true) {
+	    //System.out.println(boundary);
             visited.clear();
             int t = search(initialState, 0, boundary);
             if(t == FOUND) {
@@ -38,9 +39,9 @@ public class Sokoban {
     }
 
     public int search(GameState node, int g, int boundary) {
-        /*try{
+	/*        try{
           System.out.println(node);
-          Thread.sleep(1000);
+          Thread.sleep(300);
           } catch(Exception e){
 
           }//*/
@@ -86,17 +87,14 @@ public class Sokoban {
         int[][] distanceMatrix = new int[boxes.size()][goals.size()];
 
         int i = 0;
-        int j = 0;
         for(Point box : boxes) {
-            for(Point goal : goals) {
-                distanceMatrix[i][j] = box.manhattanDist(goal);
-                j++;
+            for(int z=0;z<gState.map.goals.size(); z++) {
+                distanceMatrix[i][z] = gState.map.dist.distance(box, z);//box.manhattanDist(goal);
             }
             i++;
-            j = 0;
         }
 
-        return Hungarian.hungarianCost(distanceMatrix) * NICLAS_KONSTANT;
+        return Hungarian.hungarianCost(distanceMatrix) * MATTIS_KONSTANT;
     }
 
     /*

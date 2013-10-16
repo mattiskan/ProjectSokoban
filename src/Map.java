@@ -6,7 +6,7 @@ public class Map {
     public int openSquares;
     public int[][] openSquareNumbers;
     public ArrayList<Point> openSquarePoints;
-    private HashSet<Point> goals;
+    public HashSet<Point> goals;
     public PushDist dist;
     
     public static void main(String[] args){
@@ -44,9 +44,7 @@ public class Map {
 	}
 	return sb.toString();
     }
-    public int distance(Point p) {
-	return dist.distance(p);
-    }
+
     
     public boolean isDeadSquare(Point p) {
 	return dist.deadSquare(p);
