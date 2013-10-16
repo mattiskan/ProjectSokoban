@@ -331,10 +331,11 @@ public class Hungarian {
     private static P find_a_zero(int row, int col) {
         int r = 0;
         int c = 0;
+	boolean done = false;
         row = -1;
         col = -1;
 
-        while(true) {
+        while(!done) {
             c = 0;
 
             while(true) {
@@ -349,7 +350,7 @@ public class Hungarian {
             }
             r++;
             if(r >= numRows)
-		break;
+		done = true;
         }
 
         return new P(row, col);
