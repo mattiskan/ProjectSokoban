@@ -8,10 +8,7 @@ public class Sokoban {
     public static final int FOUND = -1,
            NOT_FOUND = -2;
 
-    public static final int MATTIS_KONSTANT = 5;
-    public static final int NICLAS_KONSTANT = 3;
-    public static final int GUNNINGS_KONSTANT = 9;
-    public static final int AXELS_KONSTANT = 2;
+    public static final int MATTIS_KONSTANT = 3;
 
     public static final boolean DEBUG = false;
 
