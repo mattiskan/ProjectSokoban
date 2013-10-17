@@ -1,13 +1,13 @@
 import java.util.*;
 
-public class PlayerMoves {
+public class PlayerMovesR {
     GameState gs;
 
     ArrayList<GameState> possiblePaths;
     static boolean[][] visited;
     ArrayDeque<BFSRecord> q;
 
-    public PlayerMoves(GameState gs){
+    public PlayerMovesR(GameState gs){
 	this.gs = gs;
 	if(visited == null)
 	    visited = new boolean[gs.map.map.length][gs.map.map[0].length];
@@ -26,6 +26,8 @@ public class PlayerMoves {
     public ArrayList<GameState> getPossibleStates(){
 	bfs();
 	gs.setLeftmostPos(leftmostPos);
+	//System.out.println("Size: "+possiblePaths.size());
+	//System.exit(0);
 	return possiblePaths;
     }
 
@@ -45,18 +47,19 @@ public class PlayerMoves {
 		if(visited[nextSquare.y][nextSquare.x])
 		   continue;
 		if(gs.hasBox(nextSquare)){
-		    Point to = nextSquare.add(dir);
+		    Point rDir = GameState.reverseMove[d];
+		    Point to = nextSquare.add(rDir);
+		    Point toto = to.add(rDir);
 		    //System.out.println("1");
-		    if(gs.getSquare(to).isOpen() && !gs.map.isDeadSquare(to)){
+		    if(gs.getSquare(toto).isOpen()){
 			//System.out.println("2");
 			GameState possibleNextState = new GameState(gs, current.p, dir, new MoveSeq(current.m, GameState.moveToChar[d]));
-			if(!Deadlock.isDeadlock(possibleNextState, to)) {
-			    //System.out.println("3");
-			    possiblePaths.add(possibleNextState);
-			}
+
+			possiblePaths.add(possibleNextState);
+
 		    }
 		} else if(gs.getSquare(nextSquare).isOpen()) {
-		    q.addFirst(new BFSRecord(nextSquare, new MoveSeq(current.m, GameState.moveToChar[d])));
+		    q.addFirst(new BFSRecord(nextSquare, new MoveSeq(current.m, GameState.moveToChar[d+4])));
 		    visited[nextSquare.y][nextSquare.x] = true;
 
 		    if(isLeftermostPos(nextSquare)) {

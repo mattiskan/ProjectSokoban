@@ -23,6 +23,15 @@ public class Point {
 	Point o = (Point)other;
 	return o.x==x && o.y==y;
     }
+
+    @Override
+    public String toString(){
+	return String.format("(%d, %d)", x, y);
+    }
+
+    public Point reverse(){
+	return new Point(-x,-y);
+    }
     
     public Point add(Point other) {
 	return new Point(x+other.x, y+other.y);

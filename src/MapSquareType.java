@@ -18,16 +18,17 @@ public enum MapSquareType {
 
     public MapSquareType getStatic(){
 	switch(this){
-	case BOX_ON_GOAL:
-	case PLAYER_ON_GOAL:
-	    return GOAL;
-	case BOX:
-	case PLAYER:
-	    return FREE;
-	default:
+	case VOID:
+	case WALL:
 	    return this;
+	default:
+	    return FREE;
 	}
     }    
+
+    public boolean isGoal(){
+	return (this == GOAL || this == PLAYER_ON_GOAL || this == BOX_ON_GOAL);
+    }
 
     public boolean isPlayer(){
 	return (this==PLAYER || this==PLAYER_ON_GOAL);
