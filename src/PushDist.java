@@ -4,10 +4,13 @@ public class PushDist {
     int[][] distOld;
     int dist[][][];
     boolean[][] isDeadSquare;
+    ArrayList<Point> goals;
     private static final int INFINITY = 999999;
     public PushDist(Map map) {
 	this.map = map;
-	dist = new int[map.goals.size()][map.map.length][map.map[0].length];
+	System.out.println(map.goals);
+	goals = GameState.getBoxes(map.goals, map);
+	dist = new int[goals.size()][map.map.length][map.map[0].length];
 	isDeadSquare = new boolean[map.map.length][map.map[0].length];
 	for (int i=0; i<isDeadSquare.length; i++) {
 	    for (int j=0; j<isDeadSquare[0].length; j++) {
@@ -21,7 +24,7 @@ public class PushDist {
     
     public void calcDist() {
 	int i=0;
-	for (Point g : map.goals) {
+	for (Point g : goals) {
 	    dist[i] = calcGoal(dist[i], g);
 	    i++;
 	}

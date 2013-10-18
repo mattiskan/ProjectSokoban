@@ -7,27 +7,34 @@ public class Map {
     public int openSquares;
     public int[][] openSquareNumbers;
     public ArrayList<Point> openSquarePoints;
-    public HashSet<Point> goals;
-    public PushDist dist;
+    public BitSet goals;
+    public static PushDist dist;
 
     public static void main(String[] args){
     }
 
-    public Map(MapSquareType[][] map, HashSet<Point> goals, int[][] openSquareNumbers, ArrayList<Point> openSquarePoints){
+    public Map(MapSquareType[][] map, BitSet goals, int[][] openSquareNumbers, ArrayList<Point> openSquarePoints){
         this.map = map;
         tunnel = new boolean[map.length][map[0].length];
         this.openSquareNumbers = openSquareNumbers;
         this.openSquarePoints = openSquarePoints;
         this.goals = goals;
-        dist = new PushDist(this);
         findAndSetTunnelSquares();
 	//System.out.println(this);
 	//System.exit(0);
     }
+    
+    public void calculatePushDist(){
+	dist = new PushDist(this);
+    }
+
 
     public MapSquareType getSquare(Point coord){
         if (map[coord.y][coord.x]==null)
             return MapSquareType.VOID;
+	if(goals.get(openSquareNumbers[coord.y][coord.x]))
+	    return MapSquareType.GOAL;
+
         return map[coord.y][coord.x];
     }
 
@@ -53,9 +60,8 @@ public class Map {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public HashSet<Point> getGoals(){
-	return (HashSet<Point>) goals.clone();
+    public ArrayList<Point> getGoals(){
+	return GameState.getBoxes(goals, this);
     }
 
     @Override

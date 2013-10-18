@@ -15,20 +15,53 @@ public class GameStateFactory {
     private ArrayList<Point> openSquarePoints;
     private Point playerPos;
     private BitSet boxes = new BitSet();
-
-    private HashSet<Point> goals = new HashSet<Point>();
-    private GameState gs;
+    private BitSet goals = new BitSet();
+    
 
     public GameStateFactory(){
 	populateBuffer();
 	readMapsFromBuffer();
 	flowFill();
-	Map map = new Map(cmap, goals, openSquareNumbers, openSquarePoints);
-	gs = new GameState(playerPos, boxes, map);
     }
 
-    public GameState getInitialGameState(){
-	return gs;
+    public GameState getInitialGameStateNormal(){
+	Map map = new Map(cmap, goals, openSquareNumbers, openSquarePoints);
+	map.calculatePushDist();
+	return  new GameState(playerPos, boxes, map, false);
+    }
+    //Here be dragons
+    public List<GameState> getInitialGameStateReverse() {
+	Map rmap = new Map(cmap, boxes, openSquareNumbers, openSquarePoints);
+	//BFS to find all staring positions
+	ArrayList<GameState> startStates = new ArrayList<GameState>();
+	boolean[][] visited = new boolean[cmap.length][cmap[0].length];
+	for (int i = goals.nextSetBit(0); i >= 0; i = goals.nextSetBit(i+1)) {
+	    Point box = openSquarePoints.get(i);
+	    visited[box.y][box.x] = true;
+	}
+	for (Point b : GameState.getBoxes(goals, rmap)) {
+	    for (Point dir : GameState.move) {
+		Point startPos = b.add(dir);
+		if (visited[startPos.y][startPos.x] || !rmap.getSquare(startPos).isOpen())
+		    continue;
+		startStates.add(new GameState(startPos, goals, rmap, true));
+		ArrayDeque<Point> queue = new ArrayDeque<Point>();
+		queue.addFirst(startPos);
+		visited[startPos.y][startPos.x] = true;
+		while (!queue.isEmpty()) {
+		    Point currPos = queue.removeLast();
+		    for (Point bfsDir : GameState.move) {
+			Point bfsTo = currPos.add(bfsDir);
+			if (visited[bfsTo.y][bfsTo.x] || !rmap.getSquare(bfsTo).isOpen())
+			    continue;
+			visited[bfsTo.y][bfsTo.x] = true;
+			queue.addFirst(bfsTo);
+		    }
+		}
+	    }
+	}
+	//BFS end
+	return startStates;
     }
 
     private void populateBuffer() {
@@ -60,10 +93,8 @@ public class GameStateFactory {
 	    
 	    for (int x=0; x<currentLine.length(); x++) {
 		MapSquareType square = MapSquareType.fromChar(currentLine.charAt(x));
-		cmap[y][x] = square;//square.getStatic();
+		cmap[y][x] = square;//.getStatic();
 
-		if(square.getStatic() == MapSquareType.GOAL)
-		    goals.add(new Point(x,y));
 		if(square.isPlayer()) {
 		    cmap[y][x] = square.getStatic();
 		    playerPos = new Point(x,y);
@@ -85,10 +116,12 @@ public class GameStateFactory {
 	    }
 	    openSquareNumbers[p.y][p.x] = boxPointCounter++;
 	    openSquarePoints.add(p);
+	    if(cmap[p.y][p.x].isGoal())
+		goals.set(boxPointCounter-1);
 	    if(cmap[p.y][p.x].isBox()) {
 		boxes.set(boxPointCounter-1);
-		cmap[p.y][p.x] = cmap[p.y][p.x].getStatic();
 	    }
+	    cmap[p.y][p.x] = cmap[p.y][p.x].getStatic();
        	    visited.add(p);
 	    if(cmap[p.y][p.x] == MapSquareType.VOID)
 		cmap[p.y][p.x] = MapSquareType.FREE;
