@@ -8,7 +8,6 @@ public class PushDist {
     private static final int INFINITY = 999999;
     public PushDist(Map map) {
 	this.map = map;
-	System.out.println(map.goals);
 	goals = GameState.getBoxes(map.goals, map);
 	dist = new int[goals.size()][map.map.length][map.map[0].length];
 	isDeadSquare = new boolean[map.map.length][map.map[0].length];

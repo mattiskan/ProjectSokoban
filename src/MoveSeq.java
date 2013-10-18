@@ -11,6 +11,7 @@ public class MoveSeq {
 	this.parent = parent;
 	this.move = move;
     }
+
     @Override
     public String toString(){
 	StringBuilder sb = new StringBuilder();
