@@ -27,7 +27,7 @@ public class GameStateFactory {
     public GameState getInitialGameStateNormal(){
 	Map map = new Map(cmap, goals, openSquareNumbers, openSquarePoints);
 	map.calculatePushDist();
-	return  new GameState(playerPos, boxes, map, false);
+	return new GameState(playerPos, boxes, map, false);
     }
     //Here be dragons
     public List<GameState> getInitialGameStateReverse() {
@@ -96,7 +96,11 @@ public class GameStateFactory {
 		cmap[y][x] = square;//.getStatic();
 
 		if(square.isPlayer()) {
-		    cmap[y][x] = square.getStatic();
+		    if(square == MapSquareType.PLAYER_ON_GOAL)
+			cmap[y][x] = MapSquareType.GOAL;
+		    else
+			cmap[y][x] = MapSquareType.VOID;
+
 		    playerPos = new Point(x,y);
 		}
 	    }
@@ -108,7 +112,9 @@ public class GameStateFactory {
 	ArrayDeque<Point> queue = new ArrayDeque<Point>();
 
 	queue.addFirst(playerPos);
-	int boxPointCounter = 0;
+	int boxPointCounter = 1;
+	openSquarePoints.add(new Point(0,0));
+
 	while (!queue.isEmpty()) {
 	    Point p = queue.removeLast();
 	    if (visited.contains(p) || cmap[p.y][p.x] == MapSquareType.WALL) {
