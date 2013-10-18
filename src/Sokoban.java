@@ -24,56 +24,27 @@ public class Sokoban {
 
         visited = new HashMap<GameState, GameState>();
 	visitedR = new HashMap<GameState, GameState>();
-        IDAStar(initial, reverse);
+        System.out.println(IDAStar(initial, reverse));
     }
     public HashMap<GameState, GameState> visited;
     public HashMap<GameState, GameState> visitedR;
 
+    String pathToGoal;
 
-    public void IDAStar(GameState initialState, List<GameState> reverseStates) {
-	long rushTime = System.nanoTime() + 8000000000l;
+    public String IDAStar(GameState initialState, List<GameState> reverseStates) {
         int boundary = distance(initialState);
         while(true) {
             visited.clear();
             int t = search(initialState, 0, boundary);
-
-	    if(System.nanoTime() > rushTime)
-		rush(initialState);
-
+            if(t == FOUND) {
+                return pathToGoal;
+            }
 	    visitedR.clear();
 	    for (GameState gs : reverseStates) {
 		t = Math.min(t, rsearch(gs, 0, boundary));
 	    }
             boundary = t;
         }
-    }
-
-    public void rush(GameState initial){
-	visited.clear();
-	ArrayDeque<GameState> stack = new ArrayDeque<GameState>();
-	stack.addFirst(initial);
-
-	while(true){
-	    GameState current = stack.removeFirst();
-	    List<GameState> possibleMoves = current.getPossibleMoves();
-
-	    if(visited.containsKey(current))
-		continue;
-	    visited.put(current, current);
-
-	    if(current.hasAllBoxesOnGoals()){
-		finish(current.generatePath());
-	    }
-	    
-	    GameState visitedState = visitedR.get(current);
-	    if (visitedState!=null) {
-		printPath(current, visitedState);
-	    }
-	    Collections.sort(possibleMoves);
-	    for(GameState succ : possibleMoves) {
-		stack.addFirst(succ);
-	    }	    
-	}
     }
 
     public int search(GameState node, int g, int boundary) {
@@ -188,7 +159,7 @@ public class Sokoban {
 		    distanceMatrix[i][j] = boxes.get(i).manhattanDist(goals.get(j));
 	}
 
-        return Hungarian.hungarianCost(distanceMatrix) * (MATTIS_KONSTANT + (gState.reverse? 2:0));
+	return Hungarian.hungarianCost(distanceMatrix) * (MATTIS_KONSTANT + (gState.reverse? 2:0));
     }
 
     public static int[][] cleanMatrix(int[][] m, int r, int c){
@@ -216,10 +187,10 @@ public class Sokoban {
 	for(int d=0; d<4; d++){
 	    Point dir = GameState.move[d];
 	    Point next = current.add(dir);
-	        
+	            
 	    if(visited2[next.y][next.x])
 		continue;
-	        
+	            
 	    visited2[next.y][next.x] = true;
 
 	    if(next.equals(goal) || gs.getSquare(next).isOpen() && findWalkPathHelper(gs, next, goal, sb)){
